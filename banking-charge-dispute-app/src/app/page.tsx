@@ -3,7 +3,12 @@
 import { useState, useEffect, useCallback } from "react";
 import { ChatLayout } from "@/components/chat/ChatLayout";
 import { sendMessageToAgent, generateSessionId } from "@/lib/api";
-import type { Message, ResolutionCardData, Transaction, QuickReplyButton } from "@/types";
+import type {
+  Message,
+  ResolutionCardData,
+  Transaction,
+  QuickReplyButton,
+} from "@/types";
 
 export default function HomePage() {
   const [messages, setMessages] = useState<Message[]>([]);
@@ -18,7 +23,11 @@ export default function HomePage() {
     }
     return generateSessionId();
   });
-  const [resolutionCard, setResolutionCard] = useState<ResolutionCardData | null>(null);
+  const [resolutionCard, setResolutionCard] =
+    useState<ResolutionCardData | null>(null);
+  const [disputedTransactionIds, setDisputedTransactionIds] = useState<
+    Set<string>
+  >(new Set());
 
   // Initialize with system greeting
   useEffect(() => {
@@ -32,21 +41,23 @@ export default function HomePage() {
   }, []);
 
   // Detect if we should show Yes/No quick replies for fraud questions
-  const detectQuickRepliesNeeded = (text: string): QuickReplyButton[] | undefined => {
+  const detectQuickRepliesNeeded = (
+    text: string
+  ): QuickReplyButton[] | undefined => {
     const lowerText = text.toLowerCase();
 
     // Safety: only show yes/no buttons when there's a single question (not a list)
     const questionCount = (text.match(/\?/g) || []).length;
     const looksEnumerated = /\n?\s*\d+\.\s+/.test(text);
     if (questionCount !== 1 || looksEnumerated) return undefined;
-    
+
     // Check if this is a Yes/No question
     if (
-      (lowerText.includes("did you") || 
-       lowerText.includes("have you") || 
-       lowerText.includes("do you") ||
-       lowerText.includes("were you") ||
-       lowerText.includes("was this")) &&
+      (lowerText.includes("did you") ||
+        lowerText.includes("have you") ||
+        lowerText.includes("do you") ||
+        lowerText.includes("were you") ||
+        lowerText.includes("was this")) &&
       lowerText.includes("?")
     ) {
       return [
@@ -94,8 +105,12 @@ export default function HomePage() {
           content: response.reply,
           timestamp: new Date(),
           metadata: {
-            transactions: response.metadata?.transactions as Transaction[] | undefined,
-            isFraudQuestion: response.metadata?.isFraudQuestion as boolean | undefined,
+            transactions: response.metadata?.transactions as
+              | Transaction[]
+              | undefined,
+            isFraudQuestion: response.metadata?.isFraudQuestion as
+              | boolean
+              | undefined,
             quickReplies: quickReplies,
             step: response.metadata?.step as string | undefined,
           },
@@ -106,23 +121,38 @@ export default function HomePage() {
         // Check for resolution status
         if (response.metadata) {
           const status = response.metadata.status as string | undefined;
-          const transactionId = response.metadata.transactionId as string | undefined;
+          const transactionId = response.metadata.transactionId as
+            | string
+            | undefined;
 
           if (status && transactionId) {
-            let resolutionStatus: ResolutionCardData["status"] = "case_resolved";
+            let resolutionStatus: ResolutionCardData["status"] =
+              "case_resolved";
 
-            if (status === "fraud_confirmed" || status.toLowerCase().includes("fraud")) {
+            if (
+              status === "fraud_confirmed" ||
+              status.toLowerCase().includes("fraud")
+            ) {
               resolutionStatus = "fraud_confirmed";
-            } else if (status === "fraud_not_confirmed" || status.toLowerCase().includes("not fraud")) {
+            } else if (
+              status === "fraud_not_confirmed" ||
+              status.toLowerCase().includes("not fraud")
+            ) {
               resolutionStatus = "fraud_not_confirmed";
-            } else if (status === "forwarded_to_agent" || status.toLowerCase().includes("forward")) {
+            } else if (
+              status === "forwarded_to_agent" ||
+              status.toLowerCase().includes("forward")
+            ) {
               resolutionStatus = "forwarded_to_agent";
             }
 
             setResolutionCard({
               transactionId: transactionId || "N/A",
               status: resolutionStatus,
-              cardStatus: response.metadata.cardStatus as "blocked" | "active" | undefined,
+              cardStatus: response.metadata.cardStatus as
+                | "blocked"
+                | "active"
+                | undefined,
               message: response.reply,
             });
           }
@@ -132,7 +162,8 @@ export default function HomePage() {
         const errorMessage: Message = {
           id: `error-${Date.now()}`,
           role: "assistant",
-          content: "I apologize, but I'm experiencing technical difficulties. Please try again in a moment.",
+          content:
+            "I apologize, but I'm experiencing technical difficulties. Please try again in a moment.",
           timestamp: new Date(),
         };
         setMessages((prev) => [...prev, errorMessage]);
@@ -147,7 +178,8 @@ export default function HomePage() {
     const forwardMessage: Message = {
       id: `forward-${Date.now()}`,
       role: "system",
-      content: "Your case has been forwarded to a human agent. They will contact you shortly.",
+      content:
+        "Your case has been forwarded to a human agent. They will contact you shortly.",
       timestamp: new Date(),
     };
     setMessages((prev) => [...prev, forwardMessage]);
@@ -167,6 +199,7 @@ export default function HomePage() {
     };
     setMessages([initialMessage]);
     setResolutionCard(null);
+    setDisputedTransactionIds(new Set());
 
     const newSessionId = generateSessionId();
     setSessionId(newSessionId);
@@ -178,6 +211,9 @@ export default function HomePage() {
 
   const handleTransactionDispute = useCallback(
     (transaction: Transaction) => {
+      // Mark this transaction as disputed
+      setDisputedTransactionIds((prev) => new Set(prev).add(transaction.id));
+
       const disputeMessage = `I want to dispute the transaction ${transaction.id} - ${transaction.merchant} for ${transaction.amount}`;
       handleSendMessage(disputeMessage);
     },
@@ -195,6 +231,7 @@ export default function HomePage() {
           onForwardToAgent={handleForwardToAgent}
           onClearChat={handleClearChat}
           onTransactionDispute={handleTransactionDispute}
+          disputedTransactionIds={disputedTransactionIds}
           showQuickActions={true}
         />
       </div>

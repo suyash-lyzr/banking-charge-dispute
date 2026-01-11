@@ -10,6 +10,7 @@ interface MessageBubbleProps {
   message: Message
   onTransactionSelect?: (transaction: Transaction) => void
   onTransactionDispute?: (transaction: Transaction) => void
+  disputedTransactionIds?: Set<string>
   onQuickReply?: (value: string) => void
   isLatestMessage?: boolean
 }
@@ -18,6 +19,7 @@ export function MessageBubble({
   message, 
   onTransactionSelect, 
   onTransactionDispute,
+  disputedTransactionIds,
   onQuickReply,
   isLatestMessage = false
 }: MessageBubbleProps) {
@@ -59,6 +61,12 @@ export function MessageBubble({
       
       for (const line of lines) {
         const trimmed = line.trim()
+        
+        // Skip common boilerplate headers when we have transaction cards
+        if (/^(Your last transaction is:?|Transaction Details:?|Here (?:are|is) (?:the details? of )?your (?:last|recent) transactions?:?)$/i.test(trimmed)) {
+          continue
+        }
+        
         if (/(Transaction ID|Merchant Name|Merchant|Amount|Date|Channel):/i.test(trimmed)) {
           inTransactionBlock = true
           continue
@@ -71,8 +79,9 @@ export function MessageBubble({
         }
       }
       
+      // If we filtered everything out, return a friendly intro message
       if (filteredLines.length === 0) {
-        return null
+        return <div className="text-sm text-muted-foreground">Here's your transaction:</div>
       }
       
       text = filteredLines.join('\n')
@@ -101,8 +110,15 @@ export function MessageBubble({
             )
           }
           
-          // Regular text
-          return <div key={i}>{trimmedLine}</div>
+          // Check if this line is the question line (contains ?)
+          const isQuestionLine = trimmedLine.includes('?')
+          
+          // Regular text - emphasize question lines only
+          return (
+            <div key={i} className={cn(isQuestionLine && isFraudQuestion && "font-medium text-[15.5px]")}>
+              {trimmedLine}
+            </div>
+          )
         })}
       </div>
     )
@@ -125,7 +141,28 @@ export function MessageBubble({
       <div className="flex w-full flex-col mb-3">
         {/* Introductory text (if any) */}
         {message.content && renderText(message.content) && (
-          <div className="flex justify-start mb-2">
+          <div className="flex justify-start mb-2 gap-2">
+            {/* Bot avatar */}
+            <div className="size-8 shrink-0 rounded-full bg-gradient-to-br from-[#704EFD] to-[#5a3dd4] flex items-center justify-center">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="size-4 text-white"
+              >
+                <path d="M12 8V4H8" />
+                <rect width="16" height="12" x="4" y="8" rx="2" />
+                <path d="M2 14h2" />
+                <path d="M20 14h2" />
+                <path d="M15 13v2" />
+                <path d="M9 13v2" />
+              </svg>
+            </div>
+            
             <div className="max-w-[80%] bg-neutral-100 px-4 py-3 rounded-2xl rounded-tl-sm">
               <div className="text-[15px] leading-relaxed text-foreground">
                 {renderText(message.content)}
@@ -138,15 +175,19 @@ export function MessageBubble({
         )}
         
         {/* Transaction cards */}
-        <div className="flex flex-col gap-2 max-w-[80%]">
-          {message.metadata?.transactions?.map((transaction) => (
-            <TransactionCard
-              key={transaction.id}
-              transaction={transaction}
-              showDisputeButton={true}
-              onDispute={onTransactionDispute}
-            />
-          ))}
+        <div className="flex flex-col gap-2 max-w-[80%] ml-10">
+          {message.metadata?.transactions?.map((transaction) => {
+            const isAlreadyDisputed = disputedTransactionIds?.has(transaction.id) || false
+            return (
+              <TransactionCard
+                key={transaction.id}
+                transaction={transaction}
+                showDisputeButton={!isAlreadyDisputed}
+                onDispute={onTransactionDispute}
+                isDisputed={isAlreadyDisputed}
+              />
+            )
+          })}
         </div>
       </div>
     )
@@ -157,9 +198,32 @@ export function MessageBubble({
     <div
       className={cn(
         "flex w-full mb-2",
-        isUser ? "justify-end" : "justify-start"
+        isUser ? "justify-end" : "justify-start gap-2"
       )}
     >
+      {/* Bot avatar for assistant messages */}
+      {!isUser && (
+        <div className="size-8 shrink-0 rounded-full bg-gradient-to-br from-[#704EFD] to-[#5a3dd4] flex items-center justify-center self-end">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className="size-4 text-white"
+          >
+            <path d="M12 8V4H8" />
+            <rect width="16" height="12" x="4" y="8" rx="2" />
+            <path d="M2 14h2" />
+            <path d="M20 14h2" />
+            <path d="M15 13v2" />
+            <path d="M9 13v2" />
+          </svg>
+        </div>
+      )}
+      
       <div className="flex flex-col max-w-[80%]">
         <div
           className={cn(
@@ -171,9 +235,8 @@ export function MessageBubble({
           )}
         >
           <div className={cn(
-            "leading-relaxed",
-            isUser ? "text-white text-[15px]" : "text-foreground text-[15px]",
-            isFraudQuestion && "font-medium"
+            "leading-relaxed text-[15px]",
+            isUser ? "text-white" : "text-foreground"
           )}>
             {renderText(message.content)}
           </div>

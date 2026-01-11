@@ -14,9 +14,10 @@ interface TransactionCardProps {
   onSelect?: (transaction: Transaction) => void
   showDisputeButton?: boolean
   onDispute?: (transaction: Transaction) => void
+  isDisputed?: boolean
 }
 
-export function TransactionCard({ transaction, className, onSelect, showDisputeButton = true, onDispute }: TransactionCardProps) {
+export function TransactionCard({ transaction, className, onSelect, showDisputeButton = true, onDispute, isDisputed = false }: TransactionCardProps) {
   const isClickable = !!onSelect && !showDisputeButton
   
   // Format the date properly whether it's a Date object or string
@@ -63,38 +64,43 @@ export function TransactionCard({ transaction, className, onSelect, showDisputeB
       onClick={isClickable ? handleClick : undefined}
     >
       <CardContent className="p-0">
-        <div className="p-4">
-          <div className="flex items-start justify-between gap-4 mb-3">
-            <div className="flex items-start gap-3 flex-1">
-              <div className="flex size-10 shrink-0 items-center justify-center rounded-full bg-[#704EFD]/10">
-                <Store className="size-4 text-[#704EFD]" />
+        <div className="p-3">
+          <div className="flex items-start justify-between gap-3 mb-2.5">
+            <div className="flex items-start gap-2.5 flex-1">
+              <div className="flex size-9 shrink-0 items-center justify-center rounded-full bg-[#704EFD]/10">
+                <Store className="size-3.5 text-[#704EFD]" />
               </div>
               <div className="flex-1 min-w-0">
-                <div className="font-semibold text-[16px] text-foreground mb-1 truncate">
+                <div className="font-semibold text-[15px] text-foreground mb-0.5 truncate">
                   {transaction.merchant}
                 </div>
-                <div className="text-sm text-muted-foreground">
-                  {formatCurrency(transaction.amount, transaction.currency)} <span className="mx-1.5 text-muted-foreground/50">·</span> {formatDate(transaction.date)}
+                <div className="text-[13px] text-muted-foreground">
+                  {formatCurrency(transaction.amount, transaction.currency)} <span className="mx-1 text-muted-foreground/50">·</span> {formatDate(transaction.date)}
                 </div>
-                <div className="mt-2 flex items-center gap-2 flex-wrap">
-                  <Badge variant="outline" className="text-xs h-6 px-2.5 border-neutral-200 text-muted-foreground">
-                    <CreditCard className="size-3 mr-1" />
+                <div className="mt-1.5 flex items-center gap-2 flex-wrap">
+                  <Badge variant="outline" className="text-[11px] h-5 px-2 border-neutral-200 text-muted-foreground">
+                    <CreditCard className="size-2.5 mr-1" />
                     {transaction.channel}
                   </Badge>
-                  <span className="text-xs text-muted-foreground font-mono">{transaction.id}</span>
+                  <span className="text-[11px] text-muted-foreground/70 font-mono">{transaction.id}</span>
                 </div>
               </div>
             </div>
           </div>
 
-          {showDisputeButton && onDispute && (
+          {showDisputeButton && onDispute && !isDisputed && (
             <Button
               onClick={handleDisputeClick}
-              className="w-full rounded-full bg-[#704EFD] hover:bg-[#5a3dd4] text-white font-medium h-11 text-[15px] shadow-sm hover:shadow-md transition-all active:scale-[0.98]"
+              className="w-full rounded-full bg-[#704EFD] hover:bg-[#5a3dd4] text-white font-medium h-9 text-[13px] shadow-sm hover:shadow-md transition-all active:scale-[0.98]"
             >
-              <AlertCircle className="size-4 mr-2" />
+              <AlertCircle className="size-3.5 mr-1.5" />
               Dispute this charge
             </Button>
+          )}
+          {isDisputed && (
+            <div className="w-full text-center py-1.5 text-xs text-muted-foreground">
+              Dispute started
+            </div>
           )}
         </div>
       </CardContent>

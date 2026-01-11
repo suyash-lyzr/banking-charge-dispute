@@ -16,6 +16,7 @@ interface ChatLayoutProps {
   onClearChat?: () => void
   onTransactionSelect?: (transaction: Transaction) => void
   onTransactionDispute?: (transaction: Transaction) => void
+  disputedTransactionIds?: Set<string>
   showQuickActions?: boolean
 }
 
@@ -28,6 +29,7 @@ export function ChatLayout({
   onClearChat,
   onTransactionSelect,
   onTransactionDispute,
+  disputedTransactionIds,
   showQuickActions = true,
 }: ChatLayoutProps) {
   // Only show quick actions if we have few messages and no active dispute
@@ -42,7 +44,9 @@ export function ChatLayout({
             messages={messages}
             onTransactionSelect={onTransactionSelect}
             onTransactionDispute={onTransactionDispute}
+            disputedTransactionIds={disputedTransactionIds}
             onQuickReply={onSendMessage}
+            isLoading={isLoading}
           />
         </div>
         {resolutionCard && (

@@ -5,6 +5,7 @@ import { ChatMessages } from "./ChatMessages"
 import { QuickActions } from "./QuickActions"
 import { ChatInput } from "./ChatInput"
 import { ResolutionCard } from "./ResolutionCard"
+import { ChatEmptyState } from "./ChatEmptyState"
 import type { Message, ResolutionCardData, Transaction } from "@/types"
 
 interface ChatLayoutProps {
@@ -32,36 +33,45 @@ export function ChatLayout({
   disputedTransactionIds,
   showQuickActions = true,
 }: ChatLayoutProps) {
-  // Only show quick actions if we have few messages and no active dispute
-  const shouldShowQuickActions = showQuickActions && messages.length <= 2 && !resolutionCard
+  // Show empty state if only the initial greeting exists
+  const showEmptyState = messages.length <= 1 && !isLoading
+  
+  // Only show quick actions if we have messages and no active dispute
+  const shouldShowQuickActions = !showEmptyState && showQuickActions && messages.length <= 3 && !resolutionCard
 
   return (
-    <div className="flex h-full w-full flex-col bg-white">
+    <div className="flex h-full w-full flex-col bg-neutral-50">
       <ChatHeader onClearChat={onClearChat} />
       <div className="flex-1 flex flex-col min-h-0 w-full">
-        <div className="flex-1 overflow-hidden w-full">
-          <ChatMessages
-            messages={messages}
-            onTransactionSelect={onTransactionSelect}
-            onTransactionDispute={onTransactionDispute}
-            disputedTransactionIds={disputedTransactionIds}
-            onQuickReply={onSendMessage}
-            isLoading={isLoading}
-          />
-        </div>
-        {resolutionCard && (
-          <div className="px-4 md:px-6 pb-3 bg-white">
-              <ResolutionCard
-                data={resolutionCard}
-                onForwardToAgent={onForwardToAgent}
+        {showEmptyState ? (
+          <ChatEmptyState onActionClick={onSendMessage} />
+        ) : (
+          <>
+            <div className="flex-1 overflow-hidden w-full">
+              <ChatMessages
+                messages={messages}
+                onTransactionSelect={onTransactionSelect}
+                onTransactionDispute={onTransactionDispute}
+                disputedTransactionIds={disputedTransactionIds}
+                onQuickReply={onSendMessage}
+                isLoading={isLoading}
               />
-          </div>
+            </div>
+            {resolutionCard && (
+              <div className="px-4 md:px-6 pb-3 bg-neutral-50">
+                  <ResolutionCard
+                    data={resolutionCard}
+                    onForwardToAgent={onForwardToAgent}
+                  />
+              </div>
+            )}
+            <QuickActions
+              onActionClick={onSendMessage}
+              disabled={isLoading}
+              showInitialActions={shouldShowQuickActions}
+            />
+          </>
         )}
-        <QuickActions
-          onActionClick={onSendMessage}
-          disabled={isLoading}
-          showInitialActions={shouldShowQuickActions}
-        />
         <ChatInput
           onSendMessage={onSendMessage}
           disabled={isLoading}

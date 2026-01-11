@@ -5,6 +5,7 @@ import { ChatLayout } from "@/components/chat/ChatLayout";
 import { SystemModal } from "@/components/SystemModal";
 import { AppSidebar, type AppView } from "@/components/AppSidebar";
 import { DisputesDashboard } from "@/components/disputes/DisputesDashboard";
+import { ObservabilityDashboard } from "@/components/observability/ObservabilityDashboard";
 import { sendMessageToAgent, generateSessionId } from "@/lib/api";
 import type {
   Message,
@@ -445,8 +446,8 @@ export default function HomePage() {
         )}
 
         {activeView === "observability" && (
-          <div className="h-full flex items-center justify-center text-sm text-muted-foreground">
-            Observability (coming soon)
+          <div className="h-full w-full">
+            <ObservabilityDashboard />
           </div>
         )}
       </div>

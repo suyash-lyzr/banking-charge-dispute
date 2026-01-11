@@ -16,13 +16,13 @@ export function AppSidebar({ className, activeView, onChangeView }: AppSidebarPr
   return (
     <div
       className={cn(
-        "flex h-full w-[280px] flex-col border-r border-neutral-200 bg-neutral-50",
+        "flex h-full w-[280px] flex-col bg-white",
         className
       )}
     >
       {/* Header - height matches ChatHeader (h-16) */}
-      <div className="h-16 flex items-center gap-3 border-b border-neutral-200 px-5 bg-white">
-        <div className="flex size-10 items-center justify-center rounded-xl overflow-hidden">
+      <div className="h-16 flex items-center gap-3 px-5 bg-white">
+        <div className="flex size-10 shrink-0 items-center justify-center rounded-xl overflow-hidden">
           <Image
             src="/lyzr-logo.png"
             alt="Lyzr Logo"
@@ -38,64 +38,65 @@ export function AppSidebar({ className, activeView, onChangeView }: AppSidebarPr
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 space-y-2 p-4">
+      <nav className="flex-1 space-y-1 p-3">
         <button
           onClick={() => onChangeView("chat")}
           className={cn(
-            "flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors",
+            "flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all",
             activeView === "chat"
-              ? "bg-[#704EFD] text-white"
-              : "text-foreground hover:bg-neutral-200/60"
+              ? "bg-[#704EFD] text-white shadow-md"
+              : "text-foreground hover:bg-neutral-100"
           )}
         >
-          <MessageSquare className="size-4 shrink-0" />
-          Chat Assistant
+          <MessageSquare className="size-5 shrink-0" />
+          <span className="truncate">Chat Assistant</span>
         </button>
 
         <button
           onClick={() => onChangeView("disputes")}
           className={cn(
-            "flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors",
+            "flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all",
             activeView === "disputes"
-              ? "bg-[#704EFD] text-white"
-              : "text-foreground hover:bg-neutral-200/60"
+              ? "bg-[#704EFD] text-white shadow-md"
+              : "text-foreground hover:bg-neutral-100"
           )}
         >
-          <ListChecks className="size-4 shrink-0" />
-          Disputes
+          <ListChecks className="size-5 shrink-0" />
+          <span className="truncate">Disputes</span>
         </button>
 
         <button
-          disabled
-          className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-muted-foreground/60 cursor-not-allowed"
-          title="Observability (coming soon)"
+          onClick={() => onChangeView("observability")}
+          className={cn(
+            "flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all",
+            activeView === "observability"
+              ? "bg-[#704EFD] text-white shadow-md"
+              : "text-foreground hover:bg-neutral-100"
+          )}
         >
-          <BarChart3 className="size-4 shrink-0" />
-          Observability
-          <span className="ml-auto text-[10px] px-2 py-0.5 rounded-full bg-neutral-200 text-muted-foreground">
-            Soon
-          </span>
+          <BarChart3 className="size-5 shrink-0" />
+          <span className="truncate">Observability</span>
         </button>
       </nav>
 
       {/* Footer */}
-      <div className="border-t border-neutral-200 p-4 bg-white">
-        <div className="flex items-center gap-3 rounded-lg px-2 py-2">
-          <div className="flex size-9 items-center justify-center rounded-full bg-[#704EFD] text-white text-xs font-semibold">
+      <div className="p-3 bg-white">
+        <div className="flex items-center gap-3 rounded-lg px-2 py-2 hover:bg-neutral-100 transition-colors cursor-pointer">
+          <div className="flex size-9 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-[#704EFD] to-[#5a3dd4] text-white text-xs font-semibold">
             JD
           </div>
           <div className="flex-1 min-w-0">
             <p className="text-sm font-medium truncate text-foreground">John Doe</p>
-            <div className="flex items-center gap-2 text-xs text-muted-foreground">
+            <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
               <span className="inline-flex items-center gap-1">
                 <span className="size-2 rounded-full bg-green-500" />
                 Online
               </span>
               <span className="text-muted-foreground/50">•</span>
-              Customer
+              <span>Customer</span>
             </div>
           </div>
-          <ShieldCheck className="size-4 text-muted-foreground" />
+          <ShieldCheck className="size-4 text-muted-foreground shrink-0" />
         </div>
       </div>
     </div>

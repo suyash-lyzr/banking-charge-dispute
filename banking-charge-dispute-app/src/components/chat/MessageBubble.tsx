@@ -13,6 +13,7 @@ interface MessageBubbleProps {
   disputedTransactionIds?: Set<string>
   onQuickReply?: (value: string) => void
   isLatestMessage?: boolean
+  isMobile?: boolean
 }
 
 export function MessageBubble({ 
@@ -21,7 +22,8 @@ export function MessageBubble({
   onTransactionDispute,
   disputedTransactionIds,
   onQuickReply,
-  isLatestMessage = false
+  isLatestMessage = false,
+  isMobile = false
 }: MessageBubbleProps) {
   const isUser = message.role === "user"
   const isSystem = message.role === "system"
@@ -126,6 +128,37 @@ export function MessageBubble({
 
   // System message (left-aligned, not centered)
   if (isSystem) {
+    if (isMobile) {
+      return (
+        <div className="flex w-full justify-start my-2">
+          <div className="flex items-center gap-1.5">
+            {/* Bot avatar */}
+            <div className="size-7 shrink-0 rounded-full bg-gradient-to-br from-[#704EFD] to-[#5a3dd4] flex items-center justify-center">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="size-3.5 text-white"
+              >
+                <path d="M12 8V4H8" />
+                <rect width="16" height="12" x="4" y="8" rx="2" />
+                <path d="M2 14h2" />
+                <path d="M20 14h2" />
+                <path d="M15 13v2" />
+                <path d="M9 13v2" />
+              </svg>
+            </div>
+            <div className="px-3 py-2 rounded-lg rounded-tl-sm bg-white text-foreground text-[14px] shadow-sm">
+              {message.content}
+            </div>
+          </div>
+        </div>
+      )
+    }
     return (
       <div className="flex w-full justify-start my-3">
         <div className="flex items-center gap-2">
@@ -159,6 +192,64 @@ export function MessageBubble({
 
   // Assistant message with transactions
   if (!isUser && hasTransactions) {
+    if (isMobile) {
+      return (
+        <div className="flex w-full flex-col mb-2">
+          {/* Introductory text (if any) */}
+          {message.content && renderText(message.content) && (
+            <div className="flex justify-start mb-1.5 gap-1.5">
+              {/* Bot avatar */}
+              <div className="size-7 shrink-0 rounded-full bg-gradient-to-br from-[#704EFD] to-[#5a3dd4] flex items-center justify-center">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="size-3.5 text-white"
+                >
+                  <path d="M12 8V4H8" />
+                  <rect width="16" height="12" x="4" y="8" rx="2" />
+                  <path d="M2 14h2" />
+                  <path d="M20 14h2" />
+                  <path d="M15 13v2" />
+                  <path d="M9 13v2" />
+                </svg>
+              </div>
+              
+              <div className="max-w-[75%] bg-white px-3 py-2 rounded-lg rounded-tl-sm shadow-sm">
+                <div className="text-[14.5px] leading-relaxed text-foreground">
+                  {renderText(message.content)}
+                </div>
+                <div className="mt-0.5 text-[11px] text-foreground/50">
+                  {format(message.timestamp, "HH:mm")}
+                </div>
+              </div>
+            </div>
+          )}
+          
+          {/* Transaction cards */}
+          <div className="flex flex-col gap-1.5 max-w-[75%] ml-9">
+            {message.metadata?.transactions?.map((transaction) => {
+              const isAlreadyDisputed = disputedTransactionIds?.has(transaction.id) || false
+              return (
+                <TransactionCard
+                  key={transaction.id}
+                  transaction={transaction}
+                  showDisputeButton={!isAlreadyDisputed}
+                  onDispute={onTransactionDispute}
+                  isDisputed={isAlreadyDisputed}
+                  isMobile={isMobile}
+                />
+              )
+            })}
+          </div>
+        </div>
+      )
+    }
+
     return (
       <div className="flex w-full flex-col mb-3">
         {/* Introductory text (if any) */}
@@ -216,6 +307,78 @@ export function MessageBubble({
   }
 
   // Regular chat bubbles
+  if (isMobile) {
+    return (
+      <div
+        className={cn(
+          "flex w-full mb-1",
+          isUser ? "justify-end" : "justify-start gap-1.5"
+        )}
+      >
+        {/* Bot avatar for assistant messages */}
+        {!isUser && (
+          <div className="size-7 shrink-0 rounded-full bg-gradient-to-br from-[#704EFD] to-[#5a3dd4] flex items-center justify-center self-end">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="size-3.5 text-white"
+            >
+              <path d="M12 8V4H8" />
+              <rect width="16" height="12" x="4" y="8" rx="2" />
+              <path d="M2 14h2" />
+              <path d="M20 14h2" />
+              <path d="M15 13v2" />
+              <path d="M9 13v2" />
+            </svg>
+          </div>
+        )}
+        
+        <div className="flex flex-col max-w-[75%]">
+          <div
+            className={cn(
+              "rounded-lg",
+              isUser
+                ? "bg-[#DCF8C6] text-foreground px-3 py-2 rounded-tr-sm self-end shadow-sm"
+                : "bg-white text-foreground px-3 py-2 rounded-tl-sm shadow-sm",
+              isFraudQuestion && "bg-white border border-[#704EFD]/15"
+            )}
+          >
+            <div className={cn(
+              "leading-relaxed text-[14.5px]",
+              isUser ? "text-foreground" : "text-foreground"
+            )}>
+              {renderText(message.content)}
+            </div>
+            <div
+              className={cn(
+                "mt-0.5 text-[11px]",
+                isUser ? "text-foreground/60 text-right" : "text-foreground/50"
+              )}
+            >
+              {format(message.timestamp, "HH:mm")}
+            </div>
+          </div>
+          
+          {/* Quick reply buttons (only on latest assistant message) */}
+          {!isUser && hasQuickReplies && isLatestMessage && onQuickReply && (
+            <div className="mt-1.5 ml-0.5">
+              <QuickReplyButtons
+                buttons={message.metadata?.quickReplies || []}
+                onButtonClick={onQuickReply}
+                isMobile={isMobile}
+              />
+            </div>
+          )}
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div
       className={cn(

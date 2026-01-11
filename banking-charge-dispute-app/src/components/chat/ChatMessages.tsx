@@ -13,6 +13,7 @@ interface ChatMessagesProps {
   disputedTransactionIds?: Set<string>
   onQuickReply?: (value: string) => void
   isLoading?: boolean
+  isMobile?: boolean
 }
 
 export function ChatMessages({ 
@@ -21,7 +22,8 @@ export function ChatMessages({
   onTransactionDispute,
   disputedTransactionIds,
   onQuickReply,
-  isLoading = false
+  isLoading = false,
+  isMobile = false
 }: ChatMessagesProps) {
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
@@ -36,8 +38,8 @@ export function ChatMessages({
   const shownTransactionIds = new Set<string>()
 
   return (
-    <ScrollArea className="flex-1 h-full w-full overflow-y-auto bg-neutral-50">
-      <div className="w-full px-4 md:px-6 py-4">
+    <ScrollArea className={`flex-1 h-full w-full overflow-y-auto ${isMobile ? "bg-[#ECE5DD]" : "bg-neutral-50"}`}>
+      <div className={`w-full ${isMobile ? "px-2 py-2" : "px-4 md:px-6 py-4"}`}>
         <div className="flex flex-col min-h-full w-full">
           {messages.map((message, index) => {
             // Filter out duplicate transactions
@@ -66,12 +68,13 @@ export function ChatMessages({
                 disputedTransactionIds={disputedTransactionIds}
                 onQuickReply={onQuickReply}
                 isLatestMessage={index === messages.length - 1}
+                isMobile={isMobile}
               />
             )
           })}
           
           {/* Show typing indicator when loading */}
-          {isLoading && <TypingIndicator />}
+          {isLoading && <TypingIndicator isMobile={isMobile} />}
           
           <div ref={messagesEndRef} className="h-4" />
         </div>

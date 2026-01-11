@@ -10,11 +10,13 @@ import { cn } from "@/lib/utils"
 interface ResolutionCardProps {
   data: ResolutionCardData
   onForwardToAgent?: () => void
+  isMobile?: boolean
 }
 
 export function ResolutionCard({
   data,
   onForwardToAgent,
+  isMobile = false,
 }: ResolutionCardProps) {
   const getStatusConfig = () => {
     switch (data.status) {
@@ -68,6 +70,74 @@ export function ResolutionCard({
 
   const config = getStatusConfig()
   const Icon = config.icon
+
+  if (isMobile) {
+    return (
+      <div className="px-2 pb-2">
+        <Card className={cn(
+          "animate-in fade-in-50 slide-in-from-bottom-4 duration-700 border-2",
+          config.borderColor
+        )}>
+          <CardHeader className="pb-3 px-3 pt-3">
+            <div className="flex items-start justify-between gap-3">
+              <div className="flex items-center gap-2.5">
+                <div
+                  className={cn(
+                    "flex size-9 items-center justify-center rounded-lg shadow-sm",
+                    config.bgColor
+                  )}
+                >
+                  <Icon className={cn("size-4", config.iconColor)} />
+                </div>
+                <div>
+                  <h3 className="text-sm font-semibold text-foreground leading-none mb-1">
+                    Resolution Status
+                  </h3>
+                  <Badge variant={config.badgeVariant} className="text-[10px] font-medium px-1.5 py-0.5">
+                    {config.badgeText}
+                  </Badge>
+                </div>
+              </div>
+            </div>
+          </CardHeader>
+          <CardContent className="space-y-3 pt-0 px-3 pb-3">
+            <p className="text-[14px] text-muted-foreground leading-relaxed">
+              {data.message}
+            </p>
+            
+            <div className="rounded-lg bg-muted/30 p-3 space-y-2 border border-border/40">
+              <div className="flex items-center justify-between">
+                <span className="text-xs text-muted-foreground font-medium">Transaction ID</span>
+                <span className="font-mono text-xs font-semibold text-foreground">{data.transactionId}</span>
+              </div>
+              {data.cardStatus && (
+                <div className="flex items-center justify-between pt-1.5 border-t border-border/40">
+                  <span className="text-xs text-muted-foreground font-medium">Card Status</span>
+                  <Badge
+                    variant={data.cardStatus === "blocked" ? "destructive" : "default"}
+                    className="font-semibold text-[10px] px-1.5 py-0.5"
+                  >
+                    {data.cardStatus === "blocked" ? "🔒 Blocked" : "✓ Active"}
+                  </Badge>
+                </div>
+              )}
+            </div>
+
+            {data.status === "fraud_not_confirmed" && onForwardToAgent && (
+              <Button
+                variant="outline"
+                className="w-full h-10 rounded-full hover:bg-primary hover:text-primary-foreground transition-all shadow-sm group text-sm"
+                onClick={onForwardToAgent}
+              >
+                Forward to Human Agent
+                <ArrowRight className="size-3.5 ml-2 group-hover:translate-x-0.5 transition-transform" />
+              </Button>
+            )}
+          </CardContent>
+        </Card>
+      </div>
+    )
+  }
 
   return (
     <div className="mx-auto max-w-3xl px-6 pb-4">

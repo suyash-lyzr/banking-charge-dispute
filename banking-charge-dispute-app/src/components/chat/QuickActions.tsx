@@ -7,6 +7,7 @@ interface QuickActionsProps {
   onActionClick: (action: string) => void
   disabled?: boolean
   showInitialActions?: boolean
+  isMobile?: boolean
 }
 
 const QUICK_ACTIONS = [
@@ -28,8 +29,40 @@ export function QuickActions({
   onActionClick,
   disabled = false,
   showInitialActions = true,
+  isMobile = false,
 }: QuickActionsProps) {
   if (!showInitialActions) return null
+
+  if (isMobile) {
+    return (
+      <div className="flex-shrink-0 bg-[#F0F0F0]/50 px-3 py-3 border-t border-neutral-300/60">
+        <div className="flex items-center gap-2 mb-2">
+          <div className="h-px flex-1 bg-gradient-to-r from-transparent via-neutral-300 to-transparent" />
+          <span className="text-[10px] font-medium text-muted-foreground/70 uppercase tracking-wide">
+            Quick Actions
+          </span>
+          <div className="h-px flex-1 bg-gradient-to-r from-transparent via-neutral-300 to-transparent" />
+        </div>
+        <div className="flex flex-wrap gap-2 justify-center">
+          {QUICK_ACTIONS.map((action) => {
+            const Icon = action.icon
+            return (
+              <Button
+                key={action.label}
+                variant="outline"
+                onClick={() => onActionClick(action.label)}
+                disabled={disabled}
+                className="group relative rounded-lg px-3 py-2 h-auto text-[12px] font-medium border-neutral-300 bg-white text-foreground hover:bg-[#704EFD] hover:text-white hover:border-[#704EFD] transition-all shadow-sm hover:shadow-md active:scale-95"
+              >
+                <Icon className="size-3.5 mr-1.5 transition-transform group-hover:scale-110" />
+                {action.label}
+              </Button>
+            )
+          })}
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="flex-shrink-0 bg-neutral-50/50 px-6 py-4 border-t border-neutral-200/60">

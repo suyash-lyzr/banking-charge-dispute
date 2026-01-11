@@ -9,12 +9,14 @@ interface ChatInputProps {
   onSendMessage: (message: string) => void
   disabled?: boolean
   placeholder?: string
+  isMobile?: boolean
 }
 
 export function ChatInput({
   onSendMessage,
   disabled = false,
   placeholder = "Type your message...",
+  isMobile = false,
 }: ChatInputProps) {
   const [input, setInput] = useState("")
 
@@ -30,6 +32,37 @@ export function ChatInput({
       e.preventDefault()
       handleSend()
     }
+  }
+
+  if (isMobile) {
+    return (
+      <div className="sticky bottom-0 border-t border-neutral-300 bg-[#F0F0F0] p-2">
+        <div className="flex items-center gap-2">
+          <div className="relative flex-1">
+            <Input
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyPress={handleKeyPress}
+              placeholder={placeholder}
+              disabled={disabled}
+              className="h-10 pr-12 rounded-full border-neutral-300 bg-white shadow-sm focus-visible:ring-2 focus-visible:ring-[#704EFD]/20 focus-visible:border-[#704EFD] text-[15px] placeholder:text-muted-foreground/60"
+            />
+            <Button
+              onClick={handleSend}
+              disabled={disabled || !input.trim()}
+              size="icon"
+              className="absolute right-1 top-1/2 -translate-y-1/2 size-8 rounded-full bg-[#704EFD] hover:bg-[#5a3dd4] shadow-sm transition-all disabled:opacity-40 disabled:cursor-not-allowed"
+            >
+              {disabled ? (
+                <Loader2 className="size-3.5 animate-spin" />
+              ) : (
+                <Send className="size-3.5" />
+              )}
+            </Button>
+          </div>
+        </div>
+      </div>
+    )
   }
 
   return (

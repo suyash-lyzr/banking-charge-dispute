@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { ChatLayout } from "@/components/chat/ChatLayout";
+import { MobileChatFrame } from "@/components/chat/MobileChatFrame";
 import { SystemModal } from "@/components/SystemModal";
 import { AppSidebar, type AppView } from "@/components/AppSidebar";
 import { DisputesDashboard } from "@/components/disputes/DisputesDashboard";
@@ -420,19 +420,16 @@ export default function HomePage() {
 
       <div className="flex-1 min-w-0 bg-neutral-100">
         {activeView === "chat" && (
-          <div className="h-full w-full bg-white border-l border-neutral-200">
-            <ChatLayout
-              messages={messages}
-              onSendMessage={handleSendMessage}
-              isLoading={isLoading}
-              resolutionCard={resolutionCard}
-              onForwardToAgent={handleForwardToAgent}
-              onClearChat={handleClearChat}
-              onTransactionDispute={handleTransactionDispute}
-              disputedTransactionIds={disputedTransactionIds}
-              showQuickActions={true}
-            />
-          </div>
+          <MobileChatFrame
+            messages={messages}
+            onSendMessage={handleSendMessage}
+            isLoading={isLoading}
+            resolutionCard={resolutionCard}
+            onForwardToAgent={handleForwardToAgent}
+            onClearChat={handleClearChat}
+            onTransactionDispute={handleTransactionDispute}
+            disputedTransactionIds={disputedTransactionIds}
+          />
         )}
 
         {activeView === "disputes" && (

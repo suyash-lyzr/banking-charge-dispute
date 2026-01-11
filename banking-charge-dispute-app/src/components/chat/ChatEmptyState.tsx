@@ -6,6 +6,7 @@ import Image from "next/image"
 
 interface ChatEmptyStateProps {
   onActionClick: (message: string) => void
+  isMobile?: boolean
 }
 
 const SUGGESTIONS = [
@@ -41,7 +42,76 @@ const SUGGESTIONS = [
   },
 ]
 
-export function ChatEmptyState({ onActionClick }: ChatEmptyStateProps) {
+export function ChatEmptyState({ onActionClick, isMobile = false }: ChatEmptyStateProps) {
+  if (isMobile) {
+    return (
+      <div className="flex flex-col items-center justify-center h-full px-4 py-8">
+        {/* Logo and Title */}
+        <div className="flex flex-col items-center mb-8">
+          <div className="size-16 rounded-full bg-gradient-to-br from-[#704EFD] to-[#5a3dd4] flex items-center justify-center mb-3 shadow-lg">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="size-8 text-white"
+            >
+              <path d="M12 8V4H8" />
+              <rect width="16" height="12" x="4" y="8" rx="2" />
+              <path d="M2 14h2" />
+              <path d="M20 14h2" />
+              <path d="M15 13v2" />
+              <path d="M9 13v2" />
+            </svg>
+          </div>
+          <h2 className="text-lg font-semibold text-foreground mb-1">SecureBank Assistant</h2>
+          <p className="text-xs text-muted-foreground text-center">
+            Your intelligent dispute resolution assistant
+          </p>
+        </div>
+
+        {/* Suggestion Grid */}
+        <div className="w-full">
+          <div className="grid grid-cols-1 gap-2">
+            {SUGGESTIONS.map((suggestion) => {
+              const Icon = suggestion.icon
+              return (
+                <Button
+                  key={suggestion.label}
+                  variant="outline"
+                  onClick={() => onActionClick(suggestion.message)}
+                  className="h-auto py-3 px-4 justify-start text-left rounded-lg border-neutral-300 bg-white hover:bg-[#704EFD]/5 hover:border-[#704EFD] transition-all group"
+                >
+                  <div className="flex items-center gap-2.5 w-full">
+                    <div className="p-1.5 rounded-lg bg-[#704EFD]/10 group-hover:bg-[#704EFD]/20 transition-colors">
+                      <Icon className="size-4 text-[#704EFD]" />
+                    </div>
+                    <div className="flex-1">
+                      <p className="text-xs font-medium text-foreground group-hover:text-[#704EFD] transition-colors">
+                        {suggestion.label}
+                      </p>
+                    </div>
+                    <svg
+                      className="size-3.5 text-muted-foreground group-hover:text-[#704EFD] group-hover:translate-x-0.5 transition-all"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                  </div>
+                </Button>
+              )
+            })}
+          </div>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="flex flex-col items-center justify-center h-full px-6 py-12">
       {/* Logo and Title */}

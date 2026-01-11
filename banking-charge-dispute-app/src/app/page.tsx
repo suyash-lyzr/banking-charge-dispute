@@ -185,8 +185,8 @@ export default function HomePage() {
   );
 
   return (
-    <div className="h-screen w-screen overflow-hidden bg-muted/20 flex justify-center">
-      <div className="w-full h-full max-w-md md:max-w-lg lg:max-w-xl">
+    <div className="min-h-screen w-screen bg-neutral-100 flex justify-center p-4 md:p-6">
+      <div className="w-full max-w-[820px] h-[calc(100vh-2rem)] md:h-[calc(100vh-3rem)] bg-white rounded-2xl border border-neutral-200/60 shadow-sm overflow-hidden">
         <ChatLayout
           messages={messages}
           onSendMessage={handleSendMessage}

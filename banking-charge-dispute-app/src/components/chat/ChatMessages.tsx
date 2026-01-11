@@ -28,8 +28,8 @@ export function ChatMessages({
   }, [messages])
 
   return (
-    <ScrollArea className="flex-1 h-full overflow-y-auto bg-muted/20">
-      <div className="mx-auto max-w-3xl px-4 md:px-6 py-6">
+    <ScrollArea className="flex-1 h-full overflow-y-auto bg-neutral-50">
+      <div className="px-4 md:px-6 py-4">
         <div className="flex flex-col min-h-full">
           {messages.map((message, index) => (
             <MessageBubble

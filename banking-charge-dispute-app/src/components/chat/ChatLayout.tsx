@@ -34,7 +34,7 @@ export function ChatLayout({
   const shouldShowQuickActions = showQuickActions && messages.length <= 2 && !resolutionCard
 
   return (
-    <div className="flex h-full flex-col bg-background">
+    <div className="flex h-full flex-col bg-white">
       <ChatHeader onClearChat={onClearChat} />
       <div className="flex-1 flex flex-col min-h-0">
         <div className="flex-1 overflow-hidden">
@@ -46,13 +46,11 @@ export function ChatLayout({
           />
         </div>
         {resolutionCard && (
-          <div className="px-4 md:px-6 pb-4 bg-muted/20">
-            <div className="max-w-3xl mx-auto">
+          <div className="px-4 md:px-6 pb-3 bg-white">
               <ResolutionCard
                 data={resolutionCard}
                 onForwardToAgent={onForwardToAgent}
               />
-            </div>
           </div>
         )}
         <QuickActions

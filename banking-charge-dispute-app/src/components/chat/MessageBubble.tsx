@@ -92,6 +92,7 @@ export function MessageBubble({
           // Simple bullet points
           if (trimmedLine.startsWith('-') || trimmedLine.startsWith('•')) {
             const content = trimmedLine.substring(1).trim()
+            if (!content || /^-+$/.test(content)) return null
             return (
               <div key={i} className="flex gap-2">
                 <span className="shrink-0">•</span>
@@ -110,8 +111,8 @@ export function MessageBubble({
   // System message (centered, pill-shaped)
   if (isSystem) {
     return (
-      <div className="flex w-full justify-center animate-in fade-in duration-300 my-4">
-        <div className="max-w-xs px-4 py-2 rounded-full bg-muted/50 text-muted-foreground text-center text-sm">
+      <div className="flex w-full justify-center my-3">
+        <div className="max-w-xs px-4 py-2 rounded-full bg-neutral-200/60 text-muted-foreground text-center text-sm">
           {message.content}
         </div>
       </div>
@@ -121,11 +122,11 @@ export function MessageBubble({
   // Assistant message with transactions
   if (!isUser && hasTransactions) {
     return (
-      <div className="flex w-full flex-col animate-in fade-in-50 slide-in-from-left-2 duration-300 mb-4">
+      <div className="flex w-full flex-col mb-3">
         {/* Introductory text (if any) */}
         {message.content && renderText(message.content) && (
-          <div className="flex justify-start mb-3">
-            <div className="max-w-[85%] md:max-w-[75%] bg-white dark:bg-card border border-border/40 px-4 py-3 rounded-2xl rounded-tl-sm shadow-sm">
+          <div className="flex justify-start mb-2">
+            <div className="max-w-[80%] bg-neutral-100 px-4 py-3 rounded-2xl rounded-tl-sm">
               <div className="text-[15px] leading-relaxed text-foreground">
                 {renderText(message.content)}
               </div>
@@ -137,7 +138,7 @@ export function MessageBubble({
         )}
         
         {/* Transaction cards */}
-        <div className="flex flex-col gap-2 max-w-[90%] md:max-w-[80%]">
+        <div className="flex flex-col gap-2 max-w-[80%]">
           {message.metadata?.transactions?.map((transaction) => (
             <TransactionCard
               key={transaction.id}
@@ -155,18 +156,18 @@ export function MessageBubble({
   return (
     <div
       className={cn(
-        "flex w-full animate-in fade-in-50 duration-300 mb-4",
-        isUser ? "justify-end slide-in-from-right-2" : "justify-start slide-in-from-left-2"
+        "flex w-full mb-2",
+        isUser ? "justify-end" : "justify-start"
       )}
     >
-      <div className="flex flex-col max-w-[85%] md:max-w-[75%]">
+      <div className="flex flex-col max-w-[80%]">
         <div
           className={cn(
-            "rounded-2xl shadow-sm",
+            "rounded-2xl",
             isUser
               ? "bg-[#704EFD] text-white px-4 py-3 rounded-tr-sm self-end"
-              : "bg-white dark:bg-card border border-border/40 px-4 py-3 rounded-tl-sm",
-            isFraudQuestion && "bg-gradient-to-br from-white to-purple-50/30 dark:from-card dark:to-purple-950/10 border-[#704EFD]/20"
+              : "bg-neutral-100 text-foreground px-4 py-3 rounded-tl-sm",
+            isFraudQuestion && "bg-neutral-100 border border-[#704EFD]/15"
           )}
         >
           <div className={cn(

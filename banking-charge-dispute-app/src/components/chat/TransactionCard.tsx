@@ -56,8 +56,8 @@ export function TransactionCard({ transaction, className, onSelect, showDisputeB
   return (
     <Card 
       className={cn(
-        "animate-in fade-in-50 slide-in-from-bottom-2 duration-500 mb-4 overflow-hidden border-border/40 transition-all bg-white dark:bg-card",
-        isClickable && "cursor-pointer hover:border-[#704EFD] hover:shadow-md active:scale-[0.99]",
+        "mb-2 overflow-hidden border border-neutral-200/70 shadow-sm bg-white",
+        isClickable && "cursor-pointer hover:border-[#704EFD] hover:shadow-md",
         className
       )}
       onClick={isClickable ? handleClick : undefined}
@@ -73,16 +73,16 @@ export function TransactionCard({ transaction, className, onSelect, showDisputeB
                 <div className="font-semibold text-[16px] text-foreground mb-1 truncate">
                   {transaction.merchant}
                 </div>
-                <div className="flex items-center gap-1.5 flex-wrap text-xs text-muted-foreground">
-                  <span>{formatDate(transaction.date)}</span>
-                  <span className="text-muted-foreground/50">•</span>
-                  <span className="capitalize">{transaction.channel} transaction</span>
+                <div className="text-sm text-muted-foreground">
+                  {formatCurrency(transaction.amount, transaction.currency)} <span className="mx-1.5 text-muted-foreground/50">·</span> {formatDate(transaction.date)}
                 </div>
-              </div>
-            </div>
-            <div className="shrink-0 text-right">
-              <div className="text-xl font-bold text-foreground tabular-nums">
-                {formatCurrency(transaction.amount, transaction.currency)}
+                <div className="mt-2 flex items-center gap-2 flex-wrap">
+                  <Badge variant="outline" className="text-xs h-6 px-2.5 border-neutral-200 text-muted-foreground">
+                    <CreditCard className="size-3 mr-1" />
+                    {transaction.channel}
+                  </Badge>
+                  <span className="text-xs text-muted-foreground font-mono">{transaction.id}</span>
+                </div>
               </div>
             </div>
           </div>

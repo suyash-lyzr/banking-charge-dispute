@@ -32,11 +32,8 @@ export function QuickActions({
   if (!showInitialActions) return null
 
   return (
-    <div className="flex-shrink-0 border-t border-border/40 bg-muted/30 px-4 py-4">
-      <div className="text-xs text-muted-foreground mb-3 text-center font-medium uppercase tracking-wide">
-        Quick actions
-      </div>
-      <div className="flex flex-wrap gap-2 justify-center max-w-2xl mx-auto">
+    <div className="flex-shrink-0 border-t border-neutral-200 bg-white px-4 py-3">
+      <div className="flex flex-wrap gap-2 justify-center">
         {QUICK_ACTIONS.map((action) => {
           const Icon = action.icon
           return (
@@ -45,7 +42,7 @@ export function QuickActions({
               variant="outline"
               onClick={() => onActionClick(action.label)}
               disabled={disabled}
-              className="rounded-full px-5 py-2.5 h-auto text-[14px] font-medium border-[#704EFD]/30 text-[#704EFD] hover:bg-[#704EFD] hover:text-white hover:border-[#704EFD] transition-all shadow-sm hover:shadow-md active:scale-95"
+              className="rounded-full px-4 py-2 h-auto text-sm font-medium border-neutral-200 text-[#704EFD] hover:bg-[#704EFD] hover:text-white hover:border-[#704EFD]"
             >
               <Icon className="size-4 mr-2" />
               {action.label}

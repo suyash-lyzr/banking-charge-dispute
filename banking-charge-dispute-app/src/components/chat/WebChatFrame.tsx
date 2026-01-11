@@ -3,7 +3,7 @@
 import { ChatLayout } from "./ChatLayout"
 import type { Message, ResolutionCardData, Transaction } from "@/types"
 
-interface MobileChatFrameProps {
+interface WebChatFrameProps {
   messages: Message[]
   onSendMessage: (message: string) => void
   isLoading?: boolean
@@ -15,7 +15,7 @@ interface MobileChatFrameProps {
   onToggleChatMode?: () => void
 }
 
-export function MobileChatFrame({
+export function WebChatFrame({
   messages,
   onSendMessage,
   isLoading = false,
@@ -25,18 +25,18 @@ export function MobileChatFrame({
   onTransactionDispute,
   disputedTransactionIds,
   onToggleChatMode,
-}: MobileChatFrameProps) {
+}: WebChatFrameProps) {
   return (
     <div className="h-full w-full flex flex-col items-center bg-neutral-100 p-6 relative">
-      {/* Label above mobile container */}
+      {/* Label above container */}
       <div className="mb-4">
         <p className="text-xs text-muted-foreground font-medium">
-          Customer View — WhatsApp Experience
+          Desktop View — WhatsApp Web Experience
         </p>
       </div>
 
-      {/* Mobile Device Container */}
-      <div className="w-full max-w-[390px] min-h-[720px] flex-1 max-h-[calc(100vh-140px)] rounded-[20px] border border-neutral-300 bg-white shadow-xl overflow-hidden flex flex-col">
+      {/* WhatsApp Web-style Container */}
+      <div className="w-full max-w-[980px] min-h-[720px] flex-1 max-h-[calc(100vh-140px)] rounded-lg border border-neutral-300 bg-white shadow-lg overflow-hidden flex flex-col">
         <ChatLayout
           messages={messages}
           onSendMessage={onSendMessage}
@@ -47,7 +47,7 @@ export function MobileChatFrame({
           onTransactionDispute={onTransactionDispute}
           disputedTransactionIds={disputedTransactionIds}
           showQuickActions={true}
-          variant="mobile"
+          variant="web"
           onToggleChatMode={onToggleChatMode}
         />
       </div>

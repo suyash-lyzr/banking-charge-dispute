@@ -1,11 +1,13 @@
 "use client"
 
+import type { ChatVariant } from "./ChatLayout"
+
 interface TypingIndicatorProps {
-  isMobile?: boolean
+  variant?: ChatVariant
 }
 
-export function TypingIndicator({ isMobile = false }: TypingIndicatorProps) {
-  if (isMobile) {
+export function TypingIndicator({ variant = "mobile" }: TypingIndicatorProps) {
+  if (variant === "mobile") {
     return (
       <div className="flex w-full justify-start mb-1">
         <div className="flex items-center gap-2">

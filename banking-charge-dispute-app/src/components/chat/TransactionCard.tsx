@@ -7,6 +7,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import type { Transaction } from "@/types"
+import type { ChatVariant } from "./ChatLayout"
 
 interface TransactionCardProps {
   transaction: Transaction
@@ -15,10 +16,10 @@ interface TransactionCardProps {
   showDisputeButton?: boolean
   onDispute?: (transaction: Transaction) => void
   isDisputed?: boolean
-  isMobile?: boolean
+  variant?: ChatVariant
 }
 
-export function TransactionCard({ transaction, className, onSelect, showDisputeButton = true, onDispute, isDisputed = false, isMobile = false }: TransactionCardProps) {
+export function TransactionCard({ transaction, className, onSelect, showDisputeButton = true, onDispute, isDisputed = false, variant = "mobile" }: TransactionCardProps) {
   const isClickable = !!onSelect && !showDisputeButton
   
   // Format the date properly whether it's a Date object or string
@@ -55,7 +56,7 @@ export function TransactionCard({ transaction, className, onSelect, showDisputeB
     }
   }
 
-  if (isMobile) {
+  if (variant === "mobile") {
     return (
       <Card 
         className={cn(

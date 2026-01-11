@@ -4,19 +4,20 @@ import { useState, KeyboardEvent } from "react"
 import { Send, Loader2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import type { ChatVariant } from "./ChatLayout"
 
 interface ChatInputProps {
   onSendMessage: (message: string) => void
   disabled?: boolean
   placeholder?: string
-  isMobile?: boolean
+  variant?: ChatVariant
 }
 
 export function ChatInput({
   onSendMessage,
   disabled = false,
   placeholder = "Type your message...",
-  isMobile = false,
+  variant = "mobile",
 }: ChatInputProps) {
   const [input, setInput] = useState("")
 
@@ -34,7 +35,7 @@ export function ChatInput({
     }
   }
 
-  if (isMobile) {
+  if (variant === "mobile") {
     return (
       <div className="sticky bottom-0 border-t border-neutral-300 bg-[#F0F0F0] p-2">
         <div className="flex items-center gap-2">

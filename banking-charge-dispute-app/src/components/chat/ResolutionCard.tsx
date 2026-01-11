@@ -6,17 +6,18 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import type { ResolutionCardData } from "@/types"
 import { cn } from "@/lib/utils"
+import type { ChatVariant } from "./ChatLayout"
 
 interface ResolutionCardProps {
   data: ResolutionCardData
   onForwardToAgent?: () => void
-  isMobile?: boolean
+  variant?: ChatVariant
 }
 
 export function ResolutionCard({
   data,
   onForwardToAgent,
-  isMobile = false,
+  variant = "mobile",
 }: ResolutionCardProps) {
   const getStatusConfig = () => {
     switch (data.status) {
@@ -71,7 +72,7 @@ export function ResolutionCard({
   const config = getStatusConfig()
   const Icon = config.icon
 
-  if (isMobile) {
+  if (variant === "mobile") {
     return (
       <div className="px-2 pb-2">
         <Card className={cn(

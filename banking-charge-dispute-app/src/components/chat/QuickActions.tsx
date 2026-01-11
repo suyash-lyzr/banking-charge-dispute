@@ -2,12 +2,13 @@
 
 import { Button } from "@/components/ui/button"
 import { Receipt, FileText, AlertCircle } from "lucide-react"
+import type { ChatVariant } from "./ChatLayout"
 
 interface QuickActionsProps {
   onActionClick: (action: string) => void
   disabled?: boolean
   showInitialActions?: boolean
-  isMobile?: boolean
+  variant?: ChatVariant
 }
 
 const QUICK_ACTIONS = [
@@ -29,11 +30,11 @@ export function QuickActions({
   onActionClick,
   disabled = false,
   showInitialActions = true,
-  isMobile = false,
+  variant = "mobile",
 }: QuickActionsProps) {
   if (!showInitialActions) return null
 
-  if (isMobile) {
+  if (variant === "mobile") {
     return (
       <div className="flex-shrink-0 bg-[#F0F0F0]/50 px-3 py-3 border-t border-neutral-300/60">
         <div className="flex items-center gap-2 mb-2">

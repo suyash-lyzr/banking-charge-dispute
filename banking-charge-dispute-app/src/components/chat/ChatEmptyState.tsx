@@ -3,10 +3,11 @@
 import { Button } from "@/components/ui/button"
 import { Receipt, FileText, AlertCircle, TrendingUp, CreditCard, HelpCircle } from "lucide-react"
 import Image from "next/image"
+import type { ChatVariant } from "./ChatLayout"
 
 interface ChatEmptyStateProps {
   onActionClick: (message: string) => void
-  isMobile?: boolean
+  variant?: ChatVariant
 }
 
 const SUGGESTIONS = [
@@ -42,8 +43,8 @@ const SUGGESTIONS = [
   },
 ]
 
-export function ChatEmptyState({ onActionClick, isMobile = false }: ChatEmptyStateProps) {
-  if (isMobile) {
+export function ChatEmptyState({ onActionClick, variant = "mobile" }: ChatEmptyStateProps) {
+  if (variant === "mobile") {
     return (
       <div className="flex flex-col items-center justify-center h-full px-4 py-8">
         {/* Logo and Title */}

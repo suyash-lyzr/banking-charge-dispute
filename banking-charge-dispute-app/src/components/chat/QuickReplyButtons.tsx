@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
+import type { ChatVariant } from "./ChatLayout"
 
 export interface QuickReplyButton {
   label: string
@@ -13,13 +14,13 @@ interface QuickReplyButtonsProps {
   buttons: QuickReplyButton[]
   onButtonClick: (value: string) => void
   disabled?: boolean
-  isMobile?: boolean
+  variant?: ChatVariant
 }
 
-export function QuickReplyButtons({ buttons, onButtonClick, disabled, isMobile = false }: QuickReplyButtonsProps) {
+export function QuickReplyButtons({ buttons, onButtonClick, disabled, variant = "mobile" }: QuickReplyButtonsProps) {
   if (buttons.length === 0) return null
 
-  if (isMobile) {
+  if (variant === "mobile") {
     return (
       <div className="flex gap-2 mt-2 overflow-x-auto pb-1 scrollbar-hide">
         {buttons.map((button, index) => (

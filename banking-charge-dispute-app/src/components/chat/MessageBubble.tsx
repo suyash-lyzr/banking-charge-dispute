@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils"
 import type { Message, Transaction } from "@/types"
 import { TransactionCard } from "./TransactionCard"
 import { QuickReplyButtons } from "./QuickReplyButtons"
+import type { ChatVariant } from "./ChatLayout"
 
 interface MessageBubbleProps {
   message: Message
@@ -13,7 +14,7 @@ interface MessageBubbleProps {
   disputedTransactionIds?: Set<string>
   onQuickReply?: (value: string) => void
   isLatestMessage?: boolean
-  isMobile?: boolean
+  variant?: ChatVariant
 }
 
 export function MessageBubble({ 
@@ -23,7 +24,7 @@ export function MessageBubble({
   disputedTransactionIds,
   onQuickReply,
   isLatestMessage = false,
-  isMobile = false
+  variant = "mobile"
 }: MessageBubbleProps) {
   const isUser = message.role === "user"
   const isSystem = message.role === "system"
@@ -128,7 +129,7 @@ export function MessageBubble({
 
   // System message (left-aligned, not centered)
   if (isSystem) {
-    if (isMobile) {
+    if (variant === "mobile") {
       return (
         <div className="flex w-full justify-start my-2">
           <div className="flex items-center gap-1.5">
@@ -192,7 +193,7 @@ export function MessageBubble({
 
   // Assistant message with transactions
   if (!isUser && hasTransactions) {
-    if (isMobile) {
+    if (variant === "mobile") {
       return (
         <div className="flex w-full flex-col mb-2">
           {/* Introductory text (if any) */}
@@ -238,10 +239,10 @@ export function MessageBubble({
                 <TransactionCard
                   key={transaction.id}
                   transaction={transaction}
-                  showDisputeButton={!isAlreadyDisputed}
-                  onDispute={onTransactionDispute}
-                  isDisputed={isAlreadyDisputed}
-                  isMobile={isMobile}
+                showDisputeButton={!isAlreadyDisputed}
+                onDispute={onTransactionDispute}
+                isDisputed={isAlreadyDisputed}
+                variant={variant}
                 />
               )
             })}
@@ -307,7 +308,7 @@ export function MessageBubble({
   }
 
   // Regular chat bubbles
-  if (isMobile) {
+  if (variant === "mobile") {
     return (
       <div
         className={cn(
@@ -367,10 +368,10 @@ export function MessageBubble({
           {/* Quick reply buttons (only on latest assistant message) */}
           {!isUser && hasQuickReplies && isLatestMessage && onQuickReply && (
             <div className="mt-1.5 ml-0.5">
-              <QuickReplyButtons
-                buttons={message.metadata?.quickReplies || []}
-                onButtonClick={onQuickReply}
-                isMobile={isMobile}
+            <QuickReplyButtons
+              buttons={message.metadata?.quickReplies || []}
+              onButtonClick={onQuickReply}
+              variant={variant}
               />
             </div>
           )}

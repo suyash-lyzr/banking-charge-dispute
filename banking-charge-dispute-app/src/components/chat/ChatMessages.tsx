@@ -5,6 +5,7 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 import { MessageBubble } from "./MessageBubble"
 import { TypingIndicator } from "./TypingIndicator"
 import type { Message, Transaction } from "@/types"
+import type { ChatVariant } from "./ChatLayout"
 
 interface ChatMessagesProps {
   messages: Message[]
@@ -13,7 +14,7 @@ interface ChatMessagesProps {
   disputedTransactionIds?: Set<string>
   onQuickReply?: (value: string) => void
   isLoading?: boolean
-  isMobile?: boolean
+  variant?: ChatVariant
 }
 
 export function ChatMessages({ 
@@ -23,7 +24,7 @@ export function ChatMessages({
   disputedTransactionIds,
   onQuickReply,
   isLoading = false,
-  isMobile = false
+  variant = "mobile"
 }: ChatMessagesProps) {
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
@@ -37,9 +38,11 @@ export function ChatMessages({
   // Track already-shown transaction IDs to avoid duplicates
   const shownTransactionIds = new Set<string>()
 
+  const isWhatsAppTheme = variant === "mobile" || variant === "web"
+
   return (
-    <ScrollArea className={`flex-1 h-full w-full overflow-y-auto ${isMobile ? "bg-[#ECE5DD]" : "bg-neutral-50"}`}>
-      <div className={`w-full ${isMobile ? "px-2 py-2" : "px-4 md:px-6 py-4"}`}>
+    <ScrollArea className={`flex-1 h-full w-full overflow-y-auto ${isWhatsAppTheme ? "bg-[#ECE5DD]" : "bg-neutral-50"}`}>
+      <div className={`w-full ${variant === "mobile" ? "px-2 py-2" : "px-4 md:px-6 py-4"}`}>
         <div className="flex flex-col min-h-full w-full">
           {messages.map((message, index) => {
             // Filter out duplicate transactions
@@ -68,13 +71,13 @@ export function ChatMessages({
                 disputedTransactionIds={disputedTransactionIds}
                 onQuickReply={onQuickReply}
                 isLatestMessage={index === messages.length - 1}
-                isMobile={isMobile}
+                variant={variant}
               />
             )
           })}
           
           {/* Show typing indicator when loading */}
-          {isLoading && <TypingIndicator isMobile={isMobile} />}
+          {isLoading && <TypingIndicator variant={variant} />}
           
           <div ref={messagesEndRef} className="h-4" />
         </div>

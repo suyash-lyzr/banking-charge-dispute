@@ -8,6 +8,8 @@ import { ResolutionCard } from "./ResolutionCard"
 import { ChatEmptyState } from "./ChatEmptyState"
 import type { Message, ResolutionCardData, Transaction } from "@/types"
 
+export type ChatVariant = "mobile" | "web"
+
 interface ChatLayoutProps {
   messages: Message[]
   onSendMessage: (message: string) => void
@@ -19,7 +21,8 @@ interface ChatLayoutProps {
   onTransactionDispute?: (transaction: Transaction) => void
   disputedTransactionIds?: Set<string>
   showQuickActions?: boolean
-  isMobile?: boolean
+  variant?: ChatVariant
+  onToggleChatMode?: () => void
 }
 
 export function ChatLayout({
@@ -33,7 +36,8 @@ export function ChatLayout({
   onTransactionDispute,
   disputedTransactionIds,
   showQuickActions = true,
-  isMobile = false,
+  variant = "mobile",
+  onToggleChatMode,
 }: ChatLayoutProps) {
   // Show empty state if only the initial greeting exists
   const showEmptyState = messages.length <= 1 && !isLoading
@@ -41,12 +45,15 @@ export function ChatLayout({
   // Don't show quick actions once chat has started (ChatEmptyState has its own suggestions)
   const shouldShowQuickActions = false
 
+  // WhatsApp theme applies to both mobile and web variants
+  const isWhatsAppTheme = variant === "mobile" || variant === "web"
+
   return (
-    <div className={isMobile ? "flex h-full w-full flex-col bg-[#ECE5DD]" : "flex h-full w-full flex-col bg-neutral-50"}>
-      <ChatHeader onClearChat={onClearChat} isMobile={isMobile} />
+    <div className={isWhatsAppTheme ? "flex h-full w-full flex-col bg-[#ECE5DD]" : "flex h-full w-full flex-col bg-neutral-50"}>
+      <ChatHeader onClearChat={onClearChat} variant={variant} onToggleChatMode={onToggleChatMode} />
       <div className="flex-1 flex flex-col min-h-0 w-full">
         {showEmptyState ? (
-          <ChatEmptyState onActionClick={onSendMessage} isMobile={isMobile} />
+          <ChatEmptyState onActionClick={onSendMessage} variant={variant} />
         ) : (
           <>
             <div className="flex-1 overflow-hidden w-full">
@@ -57,15 +64,15 @@ export function ChatLayout({
                 disputedTransactionIds={disputedTransactionIds}
                 onQuickReply={onSendMessage}
                 isLoading={isLoading}
-                isMobile={isMobile}
+                variant={variant}
               />
             </div>
             {resolutionCard && (
-              <div className={isMobile ? "px-3 pb-2 bg-[#ECE5DD]" : "px-4 md:px-6 pb-3 bg-neutral-50"}>
+              <div className={isWhatsAppTheme ? "px-3 pb-2 bg-[#ECE5DD]" : "px-4 md:px-6 pb-3 bg-neutral-50"}>
                   <ResolutionCard
                     data={resolutionCard}
                     onForwardToAgent={onForwardToAgent}
-                    isMobile={isMobile}
+                    variant={variant}
                   />
               </div>
             )}
@@ -73,15 +80,15 @@ export function ChatLayout({
               onActionClick={onSendMessage}
               disabled={isLoading}
               showInitialActions={shouldShowQuickActions}
-              isMobile={isMobile}
+              variant={variant}
             />
           </>
         )}
         <ChatInput
           onSendMessage={onSendMessage}
           disabled={isLoading}
-          placeholder={isMobile ? "Type a message" : "Type your message..."}
-          isMobile={isMobile}
+          placeholder={variant === "mobile" ? "Type a message" : "Type your message..."}
+          variant={variant}
         />
       </div>
     </div>

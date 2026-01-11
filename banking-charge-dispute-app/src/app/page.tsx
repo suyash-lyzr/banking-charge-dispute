@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { MobileChatFrame } from "@/components/chat/MobileChatFrame";
+import { WebChatFrame } from "@/components/chat/WebChatFrame";
 import { SystemModal } from "@/components/SystemModal";
 import { AppSidebar, type AppView } from "@/components/AppSidebar";
 import { DisputesDashboard } from "@/components/disputes/DisputesDashboard";
@@ -51,8 +52,17 @@ function seedDemoDisputes(): Dispute[] {
   ];
 }
 
+export type ChatMode = "mobile" | "web";
+
 export default function HomePage() {
   const [activeView, setActiveView] = useState<AppView>("chat");
+  const [chatMode, setChatMode] = useState<ChatMode>(() => {
+    if (typeof window !== "undefined") {
+      const stored = localStorage.getItem("chat_mode");
+      if (stored === "mobile" || stored === "web") return stored;
+    }
+    return "mobile";
+  });
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [sessionId, setSessionId] = useState(() => {
@@ -358,6 +368,14 @@ export default function HomePage() {
     });
   }, [resolutionCard]);
 
+  const handleToggleChatMode = useCallback(() => {
+    const newMode: ChatMode = chatMode === "mobile" ? "web" : "mobile";
+    setChatMode(newMode);
+    if (typeof window !== "undefined") {
+      localStorage.setItem("chat_mode", newMode);
+    }
+  }, [chatMode]);
+
   const handleClearChat = useCallback(() => {
     const initialMessage: Message = {
       id: "initial",
@@ -420,16 +438,33 @@ export default function HomePage() {
 
       <div className="flex-1 min-w-0 bg-neutral-100">
         {activeView === "chat" && (
-          <MobileChatFrame
-            messages={messages}
-            onSendMessage={handleSendMessage}
-            isLoading={isLoading}
-            resolutionCard={resolutionCard}
-            onForwardToAgent={handleForwardToAgent}
-            onClearChat={handleClearChat}
-            onTransactionDispute={handleTransactionDispute}
-            disputedTransactionIds={disputedTransactionIds}
-          />
+          <>
+            {chatMode === "mobile" ? (
+              <MobileChatFrame
+                messages={messages}
+                onSendMessage={handleSendMessage}
+                isLoading={isLoading}
+                resolutionCard={resolutionCard}
+                onForwardToAgent={handleForwardToAgent}
+                onClearChat={handleClearChat}
+                onTransactionDispute={handleTransactionDispute}
+                disputedTransactionIds={disputedTransactionIds}
+                onToggleChatMode={handleToggleChatMode}
+              />
+            ) : (
+              <WebChatFrame
+                messages={messages}
+                onSendMessage={handleSendMessage}
+                isLoading={isLoading}
+                resolutionCard={resolutionCard}
+                onForwardToAgent={handleForwardToAgent}
+                onClearChat={handleClearChat}
+                onTransactionDispute={handleTransactionDispute}
+                disputedTransactionIds={disputedTransactionIds}
+                onToggleChatMode={handleToggleChatMode}
+              />
+            )}
+          </>
         )}
 
         {activeView === "disputes" && (

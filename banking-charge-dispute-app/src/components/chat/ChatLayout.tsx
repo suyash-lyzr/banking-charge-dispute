@@ -38,8 +38,8 @@ export function ChatLayout({
   // Show empty state if only the initial greeting exists
   const showEmptyState = messages.length <= 1 && !isLoading
   
-  // Only show quick actions if we have messages and no active dispute
-  const shouldShowQuickActions = !showEmptyState && showQuickActions && messages.length <= 3 && !resolutionCard
+  // Don't show quick actions once chat has started (ChatEmptyState has its own suggestions)
+  const shouldShowQuickActions = false
 
   return (
     <div className={isMobile ? "flex h-full w-full flex-col bg-[#ECE5DD]" : "flex h-full w-full flex-col bg-neutral-50"}>

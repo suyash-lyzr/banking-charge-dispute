@@ -81,7 +81,7 @@ export function MessageBubble({
       
       // If we filtered everything out, return a friendly intro message
       if (filteredLines.length === 0) {
-        return <div className="text-sm text-muted-foreground">Here's your transaction:</div>
+        return <div className="text-sm text-muted-foreground">Here&apos;s your transaction:</div>
       }
       
       text = filteredLines.join('\n')
@@ -276,7 +276,7 @@ export function MessageBubble({
         {!isUser && hasQuickReplies && isLatestMessage && onQuickReply && (
           <div className="mt-2 ml-1">
             <QuickReplyButtons
-              buttons={message.metadata.quickReplies}
+              buttons={message.metadata?.quickReplies || []}
               onButtonClick={onQuickReply}
             />
           </div>

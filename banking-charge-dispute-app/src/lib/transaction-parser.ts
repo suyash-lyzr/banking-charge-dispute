@@ -82,7 +82,7 @@ export function parseTransactionsFromResponse(
  * Normalize transaction objects to ensure consistent structure
  */
 function normalizeTransactions(rawTransactions: unknown[]): Transaction[] {
-  return rawTransactions
+  const normalized: (Transaction | null)[] = rawTransactions
     .map((tx) => {
       if (typeof tx !== "object" || tx === null) return null;
 
@@ -137,8 +137,9 @@ function normalizeTransactions(rawTransactions: unknown[]): Transaction[] {
         status,
         currency,
       };
-    })
-    .filter((tx): tx is Transaction => tx !== null);
+    });
+  
+  return normalized.filter((tx): tx is Transaction => tx !== null);
 }
 
 /**

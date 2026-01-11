@@ -83,3 +83,17 @@ export interface ResolutionCardData {
   cardStatus?: "blocked" | "active";
   message: string;
 }
+
+/**
+ * Dispute ticket for sidebar tracking
+ */
+export interface Dispute {
+  disputeId: string;
+  transactionId: string;
+  merchant: string;
+  amount: number;
+  currency?: string;
+  status: "Under Review" | "Fraud Confirmed" | "Resolved";
+  cardStatus: "Active" | "Blocked";
+  createdAt: Date;
+}

@@ -124,12 +124,34 @@ export function MessageBubble({
     )
   }
 
-  // System message (centered, pill-shaped)
+  // System message (left-aligned, not centered)
   if (isSystem) {
     return (
-      <div className="flex w-full justify-center my-3">
-        <div className="max-w-xs px-4 py-2 rounded-full bg-neutral-200/60 text-muted-foreground text-center text-sm">
-          {message.content}
+      <div className="flex w-full justify-start my-3">
+        <div className="flex items-center gap-2">
+          {/* Bot avatar */}
+          <div className="size-8 shrink-0 rounded-full bg-gradient-to-br from-[#704EFD] to-[#5a3dd4] flex items-center justify-center">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="size-4 text-white"
+            >
+              <path d="M12 8V4H8" />
+              <rect width="16" height="12" x="4" y="8" rx="2" />
+              <path d="M2 14h2" />
+              <path d="M20 14h2" />
+              <path d="M15 13v2" />
+              <path d="M9 13v2" />
+            </svg>
+          </div>
+          <div className="px-4 py-2.5 rounded-2xl rounded-tl-sm bg-neutral-100 text-foreground text-sm">
+            {message.content}
+          </div>
         </div>
       </div>
     )
@@ -175,7 +197,7 @@ export function MessageBubble({
         )}
         
         {/* Transaction cards */}
-        <div className="flex flex-col gap-2 max-w-[80%] ml-10">
+        <div className="flex flex-col gap-2 max-w-md ml-10">
           {message.metadata?.transactions?.map((transaction) => {
             const isAlreadyDisputed = disputedTransactionIds?.has(transaction.id) || false
             return (

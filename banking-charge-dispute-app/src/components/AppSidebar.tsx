@@ -1,40 +1,27 @@
 "use client"
 
-import { MessageSquare, BarChart3 } from "lucide-react"
-import { useRouter, usePathname } from "next/navigation"
+import { MessageSquare, ListChecks, BarChart3, ShieldCheck } from "lucide-react"
 import Image from "next/image"
 import { cn } from "@/lib/utils"
 
-const navigationItems = [
-  {
-    title: "Chat Assistant",
-    icon: MessageSquare,
-    href: "/",
-  },
-  {
-    title: "Observability",
-    icon: BarChart3,
-    href: "/observability",
-  },
-]
+export type AppView = "chat" | "disputes" | "observability"
 
 interface AppSidebarProps {
   className?: string
+  activeView: AppView
+  onChangeView: (view: AppView) => void
 }
 
-export function AppSidebar({ className }: AppSidebarProps) {
-  const router = useRouter()
-  const pathname = usePathname()
-
+export function AppSidebar({ className, activeView, onChangeView }: AppSidebarProps) {
   return (
     <div
       className={cn(
-        "flex h-full w-64 flex-col border-r bg-card",
+        "flex h-full w-[280px] flex-col border-r border-neutral-200 bg-neutral-50",
         className
       )}
     >
-      {/* Header */}
-      <div className="flex items-center gap-3 border-b px-6 py-5">
+      {/* Header - height matches ChatHeader (h-16) */}
+      <div className="h-16 flex items-center gap-3 border-b border-neutral-200 px-5 bg-white">
         <div className="flex size-10 items-center justify-center rounded-xl overflow-hidden">
           <Image
             src="/lyzr-logo.png"
@@ -45,50 +32,70 @@ export function AppSidebar({ className }: AppSidebarProps) {
           />
         </div>
         <div>
-          <h2 className="text-base font-semibold">SecureBank</h2>
-          <p className="text-xs text-muted-foreground">Dispute Management</p>
+          <h2 className="text-[15px] font-semibold text-foreground leading-none">SecureBank</h2>
+          <p className="text-xs text-muted-foreground mt-1">Dispute Assistant</p>
         </div>
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 space-y-1 p-4">
-        <div className="mb-2">
-          <p className="px-3 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-            Application
-          </p>
-        </div>
-        {navigationItems.map((item) => {
-          const Icon = item.icon
-          const isActive = pathname === item.href
-          
-          return (
-            <button
-              key={item.href}
-              onClick={() => router.push(item.href)}
-              className={cn(
-                "flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all",
-                isActive
-                  ? "bg-[#704EFD] text-white shadow-lg"
-                  : "text-foreground hover:bg-accent hover:text-accent-foreground"
-              )}
-            >
-              <Icon className="size-4 shrink-0" />
-              <span>{item.title}</span>
-            </button>
-          )
-        })}
+      <nav className="flex-1 space-y-2 p-4">
+        <button
+          onClick={() => onChangeView("chat")}
+          className={cn(
+            "flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors",
+            activeView === "chat"
+              ? "bg-[#704EFD] text-white"
+              : "text-foreground hover:bg-neutral-200/60"
+          )}
+        >
+          <MessageSquare className="size-4 shrink-0" />
+          Chat Assistant
+        </button>
+
+        <button
+          onClick={() => onChangeView("disputes")}
+          className={cn(
+            "flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors",
+            activeView === "disputes"
+              ? "bg-[#704EFD] text-white"
+              : "text-foreground hover:bg-neutral-200/60"
+          )}
+        >
+          <ListChecks className="size-4 shrink-0" />
+          Disputes
+        </button>
+
+        <button
+          disabled
+          className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-muted-foreground/60 cursor-not-allowed"
+          title="Observability (coming soon)"
+        >
+          <BarChart3 className="size-4 shrink-0" />
+          Observability
+          <span className="ml-auto text-[10px] px-2 py-0.5 rounded-full bg-neutral-200 text-muted-foreground">
+            Soon
+          </span>
+        </button>
       </nav>
 
       {/* Footer */}
-      <div className="border-t p-4">
-        <div className="flex items-center gap-3 rounded-lg bg-muted/50 px-3 py-2.5">
-          <div className="flex size-8 items-center justify-center rounded-full bg-gradient-to-br from-[#603BFC] to-[#A94FA1] text-white text-xs font-semibold">
+      <div className="border-t border-neutral-200 p-4 bg-white">
+        <div className="flex items-center gap-3 rounded-lg px-2 py-2">
+          <div className="flex size-9 items-center justify-center rounded-full bg-[#704EFD] text-white text-xs font-semibold">
             JD
           </div>
           <div className="flex-1 min-w-0">
-            <p className="text-sm font-medium truncate">John Doe</p>
-            <p className="text-xs text-muted-foreground truncate">john.doe@email.com</p>
+            <p className="text-sm font-medium truncate text-foreground">John Doe</p>
+            <div className="flex items-center gap-2 text-xs text-muted-foreground">
+              <span className="inline-flex items-center gap-1">
+                <span className="size-2 rounded-full bg-green-500" />
+                Online
+              </span>
+              <span className="text-muted-foreground/50">•</span>
+              Customer
+            </div>
           </div>
+          <ShieldCheck className="size-4 text-muted-foreground" />
         </div>
       </div>
     </div>

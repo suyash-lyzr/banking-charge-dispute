@@ -32,8 +32,15 @@ export function QuickActions({
   if (!showInitialActions) return null
 
   return (
-    <div className="flex-shrink-0 border-t border-neutral-200 bg-white px-4 py-3">
-      <div className="flex flex-wrap gap-2 justify-center">
+    <div className="flex-shrink-0 bg-neutral-50/50 px-6 py-4 border-t border-neutral-200/60">
+      <div className="flex items-center gap-2 mb-2.5">
+        <div className="h-px flex-1 bg-gradient-to-r from-transparent via-neutral-200 to-transparent" />
+        <span className="text-[11px] font-medium text-muted-foreground/70 uppercase tracking-wide">
+          Quick Actions
+        </span>
+        <div className="h-px flex-1 bg-gradient-to-r from-transparent via-neutral-200 to-transparent" />
+      </div>
+      <div className="flex flex-wrap gap-2.5 justify-center">
         {QUICK_ACTIONS.map((action) => {
           const Icon = action.icon
           return (
@@ -42,9 +49,9 @@ export function QuickActions({
               variant="outline"
               onClick={() => onActionClick(action.label)}
               disabled={disabled}
-              className="rounded-full px-4 py-2 h-auto text-sm font-medium border-neutral-200 text-[#704EFD] hover:bg-[#704EFD] hover:text-white hover:border-[#704EFD]"
+              className="group relative rounded-xl px-4 py-2.5 h-auto text-[13px] font-medium border-neutral-200 bg-white text-foreground hover:bg-[#704EFD] hover:text-white hover:border-[#704EFD] transition-all shadow-sm hover:shadow-md active:scale-95"
             >
-              <Icon className="size-4 mr-2" />
+              <Icon className="size-4 mr-2 transition-transform group-hover:scale-110" />
               {action.label}
             </Button>
           )

@@ -36,9 +36,9 @@ export function ChatMessages({
   const shownTransactionIds = new Set<string>()
 
   return (
-    <ScrollArea className="flex-1 h-full overflow-y-auto bg-neutral-50">
-      <div className="px-4 md:px-6 py-4">
-        <div className="flex flex-col min-h-full">
+    <ScrollArea className="flex-1 h-full w-full overflow-y-auto bg-neutral-50">
+      <div className="w-full px-4 md:px-6 py-4">
+        <div className="flex flex-col min-h-full w-full">
           {messages.map((message, index) => {
             // Filter out duplicate transactions
             let filteredMessage = message

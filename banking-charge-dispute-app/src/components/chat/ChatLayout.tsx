@@ -36,10 +36,10 @@ export function ChatLayout({
   const shouldShowQuickActions = showQuickActions && messages.length <= 2 && !resolutionCard
 
   return (
-    <div className="flex h-full flex-col bg-white">
+    <div className="flex h-full w-full flex-col bg-white">
       <ChatHeader onClearChat={onClearChat} />
-      <div className="flex-1 flex flex-col min-h-0">
-        <div className="flex-1 overflow-hidden">
+      <div className="flex-1 flex flex-col min-h-0 w-full">
+        <div className="flex-1 overflow-hidden w-full">
           <ChatMessages
             messages={messages}
             onTransactionSelect={onTransactionSelect}

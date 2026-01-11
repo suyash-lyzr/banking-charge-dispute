@@ -2,15 +2,56 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { ChatLayout } from "@/components/chat/ChatLayout";
+import { SystemModal } from "@/components/SystemModal";
+import { AppSidebar, type AppView } from "@/components/AppSidebar";
+import { DisputesDashboard } from "@/components/disputes/DisputesDashboard";
 import { sendMessageToAgent, generateSessionId } from "@/lib/api";
 import type {
   Message,
   ResolutionCardData,
   Transaction,
   QuickReplyButton,
+  Dispute,
 } from "@/types";
 
+function seedDemoDisputes(): Dispute[] {
+  const now = new Date();
+  return [
+    {
+      disputeId: "DSP-1010",
+      transactionId: "TXN1010",
+      merchant: "ATM Withdrawal",
+      amount: 10000,
+      currency: "INR",
+      status: "Fraud Confirmed",
+      cardStatus: "Blocked",
+      createdAt: now,
+    },
+    {
+      disputeId: "DSP-1009",
+      transactionId: "TXN1009",
+      merchant: "Flipkart",
+      amount: 12499,
+      currency: "INR",
+      status: "Under Review",
+      cardStatus: "Active",
+      createdAt: now,
+    },
+    {
+      disputeId: "DSP-1007",
+      transactionId: "TXN1007",
+      merchant: "Zomato",
+      amount: 560,
+      currency: "INR",
+      status: "Resolved",
+      cardStatus: "Active",
+      createdAt: now,
+    },
+  ];
+}
+
 export default function HomePage() {
+  const [activeView, setActiveView] = useState<AppView>("chat");
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [sessionId, setSessionId] = useState(() => {
@@ -28,6 +69,43 @@ export default function HomePage() {
   const [disputedTransactionIds, setDisputedTransactionIds] = useState<
     Set<string>
   >(new Set());
+  const [disputes, setDisputes] = useState<Dispute[]>(seedDemoDisputes);
+  const [selectedDisputeId, setSelectedDisputeId] = useState<string | null>(
+    null
+  );
+  const [systemModal, setSystemModal] = useState<{
+    open: boolean;
+    disputeId: string;
+    transactionId: string;
+    merchant: string;
+    amount: number;
+    currency?: string;
+  } | null>(null);
+  const [currentDisputeTransaction, setCurrentDisputeTransaction] =
+    useState<Transaction | null>(null);
+  const [currentDisputeId, setCurrentDisputeId] = useState<string | null>(null);
+
+  const inferDisputeOutcomeFromText = (text: string) => {
+    const t = text.toLowerCase();
+    const fraudConfirmed =
+      t.includes("fraud confirmed") ||
+      t.includes("unauthorized") ||
+      t.includes("temporarily blocked") ||
+      t.includes("card has been blocked") ||
+      t.includes("card has been temporarily blocked");
+    const resolved =
+      t.includes("resolved") ||
+      t.includes("valid charge") ||
+      t.includes("authorized") ||
+      t.includes("considered a valid charge");
+    const underReview =
+      t.includes("under review") ||
+      t.includes("human review") ||
+      t.includes("investigation") ||
+      t.includes("we will investigate");
+
+    return { fraudConfirmed, resolved, underReview };
+  };
 
   // Initialize with system greeting
   useEffect(() => {
@@ -118,7 +196,7 @@ export default function HomePage() {
 
         setMessages((prev) => [...prev, assistantMessage]);
 
-        // Check for resolution status
+        // Reflect outcomes into dispute tracking (frontend-only)
         if (response.metadata) {
           const status = response.metadata.status as string | undefined;
           const transactionId = response.metadata.transactionId as
@@ -134,11 +212,52 @@ export default function HomePage() {
               status.toLowerCase().includes("fraud")
             ) {
               resolutionStatus = "fraud_confirmed";
+
+              // Update existing dispute to "Fraud Confirmed"
+              setDisputes((prev) =>
+                prev.map((d) =>
+                  d.transactionId === transactionId
+                    ? {
+                        ...d,
+                        status: "Fraud Confirmed" as const,
+                        cardStatus: "Blocked" as const,
+                      }
+                    : d
+                )
+              );
+
+              // Show system modal
+              if (currentDisputeTransaction) {
+                setSystemModal({
+                  open: true,
+                  disputeId:
+                    currentDisputeId ||
+                    `DSP-${Date.now().toString().slice(-6)}`,
+                  transactionId,
+                  merchant:
+                    currentDisputeTransaction.merchant || "Unknown Merchant",
+                  amount: currentDisputeTransaction.amount || 0,
+                  currency: currentDisputeTransaction.currency || "INR",
+                });
+              }
             } else if (
               status === "fraud_not_confirmed" ||
               status.toLowerCase().includes("not fraud")
             ) {
               resolutionStatus = "fraud_not_confirmed";
+
+              // Update existing dispute to "Resolved"
+              setDisputes((prev) =>
+                prev.map((d) =>
+                  d.transactionId === transactionId
+                    ? {
+                        ...d,
+                        status: "Resolved" as const,
+                        cardStatus: "Active" as const,
+                      }
+                    : d
+                )
+              );
             } else if (
               status === "forwarded_to_agent" ||
               status.toLowerCase().includes("forward")
@@ -155,6 +274,54 @@ export default function HomePage() {
                 | undefined,
               message: response.reply,
             });
+          }
+        }
+
+        // Fallback: if no metadata-based status is present, update dispute from the agent's text
+        if (currentDisputeTransaction) {
+          const { fraudConfirmed, resolved, underReview } =
+            inferDisputeOutcomeFromText(response.reply);
+          if (fraudConfirmed) {
+            setDisputes((prev) =>
+              prev.map((d) =>
+                d.transactionId === currentDisputeTransaction.id
+                  ? {
+                      ...d,
+                      status: "Fraud Confirmed" as const,
+                      cardStatus: "Blocked" as const,
+                    }
+                  : d
+              )
+            );
+            setSystemModal({
+              open: true,
+              disputeId:
+                currentDisputeId || `DSP-${Date.now().toString().slice(-6)}`,
+              transactionId: currentDisputeTransaction.id,
+              merchant: currentDisputeTransaction.merchant,
+              amount: currentDisputeTransaction.amount,
+              currency: currentDisputeTransaction.currency || "INR",
+            });
+          } else if (resolved) {
+            setDisputes((prev) =>
+              prev.map((d) =>
+                d.transactionId === currentDisputeTransaction.id
+                  ? {
+                      ...d,
+                      status: "Resolved" as const,
+                      cardStatus: "Active" as const,
+                    }
+                  : d
+              )
+            );
+          } else if (underReview) {
+            setDisputes((prev) =>
+              prev.map((d) =>
+                d.transactionId === currentDisputeTransaction.id
+                  ? { ...d, status: "Under Review" as const }
+                  : d
+              )
+            );
           }
         }
       } catch (error) {
@@ -200,6 +367,11 @@ export default function HomePage() {
     setMessages([initialMessage]);
     setResolutionCard(null);
     setDisputedTransactionIds(new Set());
+    setDisputes(seedDemoDisputes());
+    setSystemModal(null);
+    setSelectedDisputeId(null);
+    setCurrentDisputeTransaction(null);
+    setCurrentDisputeId(null);
 
     const newSessionId = generateSessionId();
     setSessionId(newSessionId);
@@ -214,6 +386,27 @@ export default function HomePage() {
       // Mark this transaction as disputed
       setDisputedTransactionIds((prev) => new Set(prev).add(transaction.id));
 
+      // Store transaction for later dispute updates
+      setCurrentDisputeTransaction(transaction);
+
+      // Create an "Under Review" dispute immediately (if not already present)
+      setDisputes((prev) => {
+        if (prev.some((d) => d.transactionId === transaction.id)) return prev;
+        const disputeId = `DSP-${Date.now().toString().slice(-6)}`;
+        setCurrentDisputeId(disputeId);
+        const newDispute: Dispute = {
+          disputeId,
+          transactionId: transaction.id,
+          merchant: transaction.merchant,
+          amount: transaction.amount,
+          currency: transaction.currency || "INR",
+          status: "Under Review",
+          cardStatus: "Active",
+          createdAt: new Date(),
+        };
+        return [newDispute, ...prev];
+      });
+
       const disputeMessage = `I want to dispute the transaction ${transaction.id} - ${transaction.merchant} for ${transaction.amount}`;
       handleSendMessage(disputeMessage);
     },
@@ -221,20 +414,55 @@ export default function HomePage() {
   );
 
   return (
-    <div className="min-h-screen w-screen bg-neutral-100 flex justify-center p-4 md:p-6">
-      <div className="w-full max-w-[820px] h-[calc(100vh-2rem)] md:h-[calc(100vh-3rem)] bg-white rounded-2xl border border-neutral-200/60 shadow-sm overflow-hidden">
-        <ChatLayout
-          messages={messages}
-          onSendMessage={handleSendMessage}
-          isLoading={isLoading}
-          resolutionCard={resolutionCard}
-          onForwardToAgent={handleForwardToAgent}
-          onClearChat={handleClearChat}
-          onTransactionDispute={handleTransactionDispute}
-          disputedTransactionIds={disputedTransactionIds}
-          showQuickActions={true}
-        />
+    <div className="h-screen w-screen bg-neutral-100 flex">
+      <AppSidebar activeView={activeView} onChangeView={setActiveView} />
+
+      <div className="flex-1 min-w-0 bg-neutral-100">
+        {activeView === "chat" && (
+          <div className="h-full w-full bg-white border-l border-neutral-200">
+            <ChatLayout
+              messages={messages}
+              onSendMessage={handleSendMessage}
+              isLoading={isLoading}
+              resolutionCard={resolutionCard}
+              onForwardToAgent={handleForwardToAgent}
+              onClearChat={handleClearChat}
+              onTransactionDispute={handleTransactionDispute}
+              disputedTransactionIds={disputedTransactionIds}
+              showQuickActions={true}
+            />
+          </div>
+        )}
+
+        {activeView === "disputes" && (
+          <div className="h-full w-full bg-neutral-100">
+            <DisputesDashboard
+              disputes={disputes}
+              selectedDisputeId={selectedDisputeId}
+              onSelectDispute={setSelectedDisputeId}
+            />
+          </div>
+        )}
+
+        {activeView === "observability" && (
+          <div className="h-full flex items-center justify-center text-sm text-muted-foreground">
+            Observability (coming soon)
+          </div>
+        )}
       </div>
+
+      {/* System Modal for Fraud Confirmation */}
+      {systemModal && (
+        <SystemModal
+          open={systemModal.open}
+          onOpenChange={(open) => setSystemModal(open ? systemModal : null)}
+          disputeId={systemModal.disputeId}
+          transactionId={systemModal.transactionId}
+          merchant={systemModal.merchant}
+          amount={systemModal.amount}
+          currency={systemModal.currency}
+        />
+      )}
     </div>
   );
 }

@@ -450,6 +450,10 @@ export default function HomePage() {
                 onTransactionDispute={handleTransactionDispute}
                 disputedTransactionIds={disputedTransactionIds}
                 onToggleChatMode={handleToggleChatMode}
+                systemModal={systemModal}
+                onSystemModalOpenChange={(open) =>
+                  setSystemModal(open ? systemModal : null)
+                }
               />
             ) : (
               <WebChatFrame
@@ -485,7 +489,7 @@ export default function HomePage() {
       </div>
 
       {/* System Modal for Fraud Confirmation */}
-      {systemModal && (
+      {systemModal && !(activeView === "chat" && chatMode === "mobile") && (
         <SystemModal
           open={systemModal.open}
           onOpenChange={(open) => setSystemModal(open ? systemModal : null)}

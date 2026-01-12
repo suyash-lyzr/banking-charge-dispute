@@ -61,7 +61,7 @@ export function TransactionCard({ transaction, className, onSelect, showDisputeB
       <Card 
         className={cn(
           "mb-1.5 overflow-hidden border border-neutral-300/70 shadow-sm bg-white",
-          isClickable && "cursor-pointer hover:border-[#704EFD] hover:shadow-md",
+          isClickable && "cursor-pointer hover:border-primary hover:shadow-md",
           className
         )}
         onClick={isClickable ? handleClick : undefined}
@@ -70,8 +70,8 @@ export function TransactionCard({ transaction, className, onSelect, showDisputeB
           <div className="p-2.5">
             <div className="flex items-start justify-between gap-2 mb-2">
               <div className="flex items-start gap-2 flex-1">
-                <div className="flex size-7 shrink-0 items-center justify-center rounded-full bg-[#704EFD]/10">
-                  <Store className="size-3 text-[#704EFD]" />
+                <div className="flex size-7 shrink-0 items-center justify-center rounded-full bg-primary/10">
+                  <Store className="size-3 text-primary" />
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="font-semibold text-[14px] text-foreground mb-0.5 truncate">
@@ -94,7 +94,7 @@ export function TransactionCard({ transaction, className, onSelect, showDisputeB
             {showDisputeButton && onDispute && !isDisputed && (
               <Button
                 onClick={handleDisputeClick}
-                className="w-full rounded-full bg-[#704EFD] hover:bg-[#5a3dd4] text-white font-medium h-8 text-[12px] shadow-sm hover:shadow-md transition-all active:scale-[0.98]"
+                className="w-full rounded-full bg-primary hover:bg-primary/90 text-primary-foreground font-medium h-8 text-[12px] shadow-sm hover:shadow-md transition-all active:scale-[0.98]"
               >
                 <AlertCircle className="size-3 mr-1" />
                 Dispute this charge
@@ -115,7 +115,7 @@ export function TransactionCard({ transaction, className, onSelect, showDisputeB
     <Card 
       className={cn(
         "mb-2 overflow-hidden border border-neutral-200/70 shadow-sm bg-white",
-        isClickable && "cursor-pointer hover:border-[#704EFD] hover:shadow-md",
+        isClickable && "cursor-pointer hover:border-primary hover:shadow-md",
         className
       )}
       onClick={isClickable ? handleClick : undefined}
@@ -124,8 +124,8 @@ export function TransactionCard({ transaction, className, onSelect, showDisputeB
         <div className="p-3">
           <div className="flex items-start justify-between gap-3 mb-2.5">
             <div className="flex items-start gap-2.5 flex-1">
-              <div className="flex size-9 shrink-0 items-center justify-center rounded-full bg-[#704EFD]/10">
-                <Store className="size-3.5 text-[#704EFD]" />
+              <div className="flex size-9 shrink-0 items-center justify-center rounded-full bg-primary/10">
+                <Store className="size-3.5 text-primary" />
               </div>
               <div className="flex-1 min-w-0">
                 <div className="font-semibold text-[15px] text-foreground mb-0.5 truncate">
@@ -148,7 +148,7 @@ export function TransactionCard({ transaction, className, onSelect, showDisputeB
           {showDisputeButton && onDispute && !isDisputed && (
             <Button
               onClick={handleDisputeClick}
-              className="w-full rounded-full bg-[#704EFD] hover:bg-[#5a3dd4] text-white font-medium h-9 text-[13px] shadow-sm hover:shadow-md transition-all active:scale-[0.98]"
+              className="w-full rounded-full bg-primary hover:bg-primary/90 text-primary-foreground font-medium h-9 text-[13px] shadow-sm hover:shadow-md transition-all active:scale-[0.98]"
             >
               <AlertCircle className="size-3.5 mr-1.5" />
               Dispute this charge

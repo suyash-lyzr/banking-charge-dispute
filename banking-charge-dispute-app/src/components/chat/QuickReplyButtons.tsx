@@ -30,10 +30,10 @@ export function QuickReplyButtons({ buttons, onButtonClick, disabled, variant = 
             disabled={disabled}
             className={cn(
               "rounded-full px-4 py-2.5 h-auto text-[14px] font-medium transition-all whitespace-nowrap shrink-0",
-              "bg-white border border-[#704EFD] text-[#704EFD]",
+              "bg-white border border-primary text-primary",
               "active:scale-95 shadow-sm",
               "disabled:opacity-50 disabled:cursor-not-allowed",
-              !disabled && "hover:bg-[#704EFD] hover:text-white"
+              !disabled && "hover:bg-primary hover:text-primary-foreground"
             )}
           >
             {button.label}
@@ -53,7 +53,7 @@ export function QuickReplyButtons({ buttons, onButtonClick, disabled, variant = 
           variant={button.variant || "outline"}
           className={cn(
             "rounded-full px-5 py-2.5 h-auto text-[14px] font-medium transition-all",
-            "border-[#704EFD] text-[#704EFD] hover:bg-[#704EFD] hover:text-white",
+            "border-primary text-primary hover:bg-primary hover:text-primary-foreground",
             "active:scale-95 shadow-sm hover:shadow-md",
             button.variant === "destructive" && "border-red-500 text-red-500 hover:bg-red-500 hover:text-white",
             disabled && "opacity-50 cursor-not-allowed"

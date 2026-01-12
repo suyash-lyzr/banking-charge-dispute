@@ -137,7 +137,7 @@ export function SystemModal({
                 <div className="flex flex-col gap-2 pt-1">
                   <Button
                     variant="outline"
-                    className="w-full rounded-full h-9 border-[#704EFD] text-[#704EFD] hover:bg-[#704EFD] hover:text-white text-[13px]"
+                    className="w-full rounded-full h-9 border-primary text-primary hover:bg-primary hover:text-primary-foreground text-[13px]"
                     onClick={() => {
                       alert("New card request feature coming soon")
                     }}
@@ -211,7 +211,7 @@ export function SystemModal({
                 <div className="flex flex-col gap-2 pt-2">
                   <Button
                     variant="outline"
-                    className="w-full rounded-full h-10 border-[#704EFD] text-[#704EFD] hover:bg-[#704EFD] hover:text-white"
+                    className="w-full rounded-full h-10 border-primary text-primary hover:bg-primary hover:text-primary-foreground"
                     onClick={() => {
                       // Mock action
                       alert("New card request feature coming soon")

@@ -99,7 +99,7 @@ export function DisputesDashboard({
                   className={cn(
                     "w-full text-left rounded-xl border p-3 transition-colors",
                     isActive
-                      ? "border-[#704EFD]/30 bg-[#704EFD]/5"
+                      ? "border-primary/30 bg-primary/5"
                       : "border-neutral-200 hover:bg-neutral-50"
                   )}
                 >
@@ -238,7 +238,7 @@ export function DisputesDashboard({
                         Status: <span className="font-medium text-foreground">Card Temporarily Blocked</span>
                       </div>
                     </div>
-                    <button className="rounded-full bg-[#704EFD] text-white text-sm font-medium px-4 py-2">
+                    <button className="rounded-full bg-primary text-primary-foreground text-sm font-medium px-4 py-2 hover:bg-primary/90">
                       View Card Actions
                     </button>
                   </CardContent>

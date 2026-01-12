@@ -53,7 +53,7 @@ export function QuickActions({
                 variant="outline"
                 onClick={() => onActionClick(action.label)}
                 disabled={disabled}
-                className="group relative rounded-lg px-3 py-2 h-auto text-[12px] font-medium border-neutral-300 bg-white text-foreground hover:bg-[#704EFD] hover:text-white hover:border-[#704EFD] transition-all shadow-sm hover:shadow-md active:scale-95"
+                className="group relative rounded-lg px-3 py-2 h-auto text-[12px] font-medium border-neutral-300 bg-white text-foreground hover:bg-primary hover:text-primary-foreground hover:border-primary transition-all shadow-sm hover:shadow-md active:scale-95"
               >
                 <Icon className="size-3.5 mr-1.5 transition-transform group-hover:scale-110" />
                 {action.label}
@@ -83,7 +83,7 @@ export function QuickActions({
               variant="outline"
               onClick={() => onActionClick(action.label)}
               disabled={disabled}
-              className="group relative rounded-xl px-4 py-2.5 h-auto text-[13px] font-medium border-neutral-200 bg-white text-foreground hover:bg-[#704EFD] hover:text-white hover:border-[#704EFD] transition-all shadow-sm hover:shadow-md active:scale-95"
+              className="group relative rounded-xl px-4 py-2.5 h-auto text-[13px] font-medium border-neutral-200 bg-white text-foreground hover:bg-primary hover:text-primary-foreground hover:border-primary transition-all shadow-sm hover:shadow-md active:scale-95"
             >
               <Icon className="size-4 mr-2 transition-transform group-hover:scale-110" />
               {action.label}

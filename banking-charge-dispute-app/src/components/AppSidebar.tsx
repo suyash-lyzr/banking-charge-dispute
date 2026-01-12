@@ -24,16 +24,16 @@ export function AppSidebar({ className, activeView, onChangeView }: AppSidebarPr
       <div className="h-16 flex items-center gap-3 px-5 bg-white">
         <div className="flex size-10 shrink-0 items-center justify-center rounded-xl overflow-hidden">
           <Image
-            src="/lyzr-logo.png"
-            alt="Lyzr Logo"
+            src="/banco-falabella-logo.svg"
+            alt="Banco Falabella"
             width={40}
             height={40}
             className="object-contain"
           />
         </div>
         <div>
-          <h2 className="text-[15px] font-semibold text-foreground leading-none">SecureBank</h2>
-          <p className="text-xs text-muted-foreground mt-1">Dispute Assistant</p>
+          <h2 className="text-[15px] font-semibold text-foreground leading-none">Banco Falabella</h2>
+          <p className="text-xs text-muted-foreground mt-1">Asistente de Disputas</p>
         </div>
       </div>
 
@@ -44,7 +44,7 @@ export function AppSidebar({ className, activeView, onChangeView }: AppSidebarPr
           className={cn(
             "flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all",
             activeView === "chat"
-              ? "bg-[#704EFD] text-white shadow-md"
+              ? "bg-primary text-primary-foreground shadow-md"
               : "text-foreground hover:bg-neutral-100"
           )}
         >
@@ -57,7 +57,7 @@ export function AppSidebar({ className, activeView, onChangeView }: AppSidebarPr
           className={cn(
             "flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all",
             activeView === "disputes"
-              ? "bg-[#704EFD] text-white shadow-md"
+              ? "bg-primary text-primary-foreground shadow-md"
               : "text-foreground hover:bg-neutral-100"
           )}
         >
@@ -70,7 +70,7 @@ export function AppSidebar({ className, activeView, onChangeView }: AppSidebarPr
           className={cn(
             "flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all",
             activeView === "observability"
-              ? "bg-[#704EFD] text-white shadow-md"
+              ? "bg-primary text-primary-foreground shadow-md"
               : "text-foreground hover:bg-neutral-100"
           )}
         >
@@ -82,7 +82,7 @@ export function AppSidebar({ className, activeView, onChangeView }: AppSidebarPr
       {/* Footer */}
       <div className="p-3 bg-white">
         <div className="flex items-center gap-3 rounded-lg px-2 py-2 hover:bg-neutral-100 transition-colors cursor-pointer">
-          <div className="flex size-9 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-[#704EFD] to-[#5a3dd4] text-white text-xs font-semibold">
+          <div className="flex size-9 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground text-xs font-semibold">
             JD
           </div>
           <div className="flex-1 min-w-0">

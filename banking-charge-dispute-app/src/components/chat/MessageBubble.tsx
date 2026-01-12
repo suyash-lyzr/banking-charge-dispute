@@ -134,7 +134,7 @@ export function MessageBubble({
         <div className="flex w-full justify-start my-2">
           <div className="flex items-center gap-1.5">
             {/* Bot avatar */}
-            <div className="size-7 shrink-0 rounded-full bg-gradient-to-br from-[#704EFD] to-[#5a3dd4] flex items-center justify-center">
+            <div className="size-7 shrink-0 rounded-full bg-primary flex items-center justify-center">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
@@ -164,7 +164,7 @@ export function MessageBubble({
       <div className="flex w-full justify-start my-3">
         <div className="flex items-center gap-2">
           {/* Bot avatar */}
-          <div className="size-8 shrink-0 rounded-full bg-gradient-to-br from-[#704EFD] to-[#5a3dd4] flex items-center justify-center">
+          <div className="size-8 shrink-0 rounded-full bg-primary flex items-center justify-center">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
@@ -200,7 +200,7 @@ export function MessageBubble({
           {message.content && renderText(message.content) && (
             <div className="flex justify-start mb-1.5 gap-1.5">
               {/* Bot avatar */}
-              <div className="size-7 shrink-0 rounded-full bg-gradient-to-br from-[#704EFD] to-[#5a3dd4] flex items-center justify-center">
+              <div className="size-7 shrink-0 rounded-full bg-primary flex items-center justify-center">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 24 24"
@@ -257,7 +257,7 @@ export function MessageBubble({
         {message.content && renderText(message.content) && (
           <div className="flex justify-start mb-2 gap-2">
             {/* Bot avatar */}
-            <div className="size-8 shrink-0 rounded-full bg-gradient-to-br from-[#704EFD] to-[#5a3dd4] flex items-center justify-center">
+            <div className="size-8 shrink-0 rounded-full bg-primary flex items-center justify-center">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
@@ -318,7 +318,7 @@ export function MessageBubble({
       >
         {/* Bot avatar for assistant messages */}
         {!isUser && (
-          <div className="size-7 shrink-0 rounded-full bg-gradient-to-br from-[#704EFD] to-[#5a3dd4] flex items-center justify-center self-end">
+          <div className="size-7 shrink-0 rounded-full bg-primary flex items-center justify-center self-end">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
@@ -346,7 +346,7 @@ export function MessageBubble({
               isUser
                 ? "bg-[#DCF8C6] text-foreground px-3 py-2 rounded-tr-sm self-end shadow-sm"
                 : "bg-white text-foreground px-3 py-2 rounded-tl-sm shadow-sm",
-              isFraudQuestion && "bg-white border border-[#704EFD]/15"
+              isFraudQuestion && "bg-white border border-primary/15"
             )}
           >
             <div className={cn(
@@ -389,7 +389,7 @@ export function MessageBubble({
     >
       {/* Bot avatar for assistant messages */}
       {!isUser && (
-        <div className="size-8 shrink-0 rounded-full bg-gradient-to-br from-[#704EFD] to-[#5a3dd4] flex items-center justify-center self-end">
+        <div className="size-8 shrink-0 rounded-full bg-primary flex items-center justify-center self-end">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
@@ -415,21 +415,21 @@ export function MessageBubble({
           className={cn(
             "rounded-2xl",
             isUser
-              ? "bg-[#704EFD] text-white px-4 py-3 rounded-tr-sm self-end"
+              ? "bg-primary text-primary-foreground px-4 py-3 rounded-tr-sm self-end"
               : "bg-neutral-100 text-foreground px-4 py-3 rounded-tl-sm",
-            isFraudQuestion && "bg-neutral-100 border border-[#704EFD]/15"
+            isFraudQuestion && "bg-neutral-100 border border-primary/15"
           )}
         >
           <div className={cn(
             "leading-relaxed text-[15px]",
-            isUser ? "text-white" : "text-foreground"
+            isUser ? "text-primary-foreground" : "text-foreground"
           )}>
             {renderText(message.content)}
           </div>
           <div
             className={cn(
               "mt-1.5 text-[11px]",
-              isUser ? "text-white/70 text-right" : "text-muted-foreground/60"
+              isUser ? "text-primary-foreground/70 text-right" : "text-muted-foreground/60"
             )}
           >
             {format(message.timestamp, "HH:mm")}

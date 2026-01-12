@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Banking Charge Dispute - SecureBank",
+  title: "Banking Charge Dispute - Banco Falabella",
   description: "Enterprise banking charge dispute system",
 };
 

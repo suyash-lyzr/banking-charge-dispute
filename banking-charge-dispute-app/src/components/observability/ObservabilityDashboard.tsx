@@ -105,7 +105,7 @@ export function ObservabilityDashboard() {
               AI agent performance, traces, and governance
             </p>
           </div>
-          <Badge variant="outline" className="text-xs px-3 py-1 bg-[#704EFD] text-white border-[#704EFD]">
+          <Badge variant="outline" className="text-xs px-3 py-1 bg-primary text-primary-foreground border-primary">
             Demo Environment
           </Badge>
         </div>
@@ -204,7 +204,7 @@ export function ObservabilityDashboard() {
                     onClick={() => setSelectedTrace(trace)}
                     className={`w-full text-left p-3 rounded-lg border transition-all ${
                       selectedTrace.id === trace.id
-                        ? "border-[#704EFD] bg-[#704EFD]/5"
+                        ? "border-primary bg-primary/5"
                         : "border-neutral-200 hover:border-neutral-300 hover:bg-neutral-50"
                     }`}
                   >
@@ -357,7 +357,7 @@ export function ObservabilityDashboard() {
               </div>
               <div className="pt-2 border-t border-neutral-200 flex justify-between text-sm font-semibold">
                 <span>Total</span>
-                <span className="text-[#704EFD]">$36.13</span>
+                <span className="text-primary">$36.13</span>
               </div>
             </CardContent>
           </Card>

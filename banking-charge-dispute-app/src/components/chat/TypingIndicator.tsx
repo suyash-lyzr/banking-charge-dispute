@@ -12,7 +12,7 @@ export function TypingIndicator({ variant = "mobile" }: TypingIndicatorProps) {
       <div className="flex w-full justify-start mb-1">
         <div className="flex items-center gap-2">
           {/* Bot avatar */}
-          <div className="size-7 shrink-0 rounded-full bg-gradient-to-br from-[#704EFD] to-[#5a3dd4] flex items-center justify-center">
+          <div className="size-7 shrink-0 rounded-full bg-primary flex items-center justify-center">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
@@ -49,7 +49,7 @@ export function TypingIndicator({ variant = "mobile" }: TypingIndicatorProps) {
     <div className="flex w-full justify-start mb-2">
       <div className="flex items-center gap-3">
         {/* Bot avatar */}
-        <div className="size-8 shrink-0 rounded-full bg-gradient-to-br from-[#704EFD] to-[#5a3dd4] flex items-center justify-center">
+        <div className="size-8 shrink-0 rounded-full bg-primary flex items-center justify-center">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"

@@ -49,7 +49,7 @@ export function ChatEmptyState({ onActionClick, variant = "mobile" }: ChatEmptyS
       <div className="flex flex-col items-center justify-center h-full px-4 py-8">
         {/* Logo and Title */}
         <div className="flex flex-col items-center mb-8">
-          <div className="size-16 rounded-full bg-gradient-to-br from-[#704EFD] to-[#5a3dd4] flex items-center justify-center mb-3 shadow-lg">
+        <div className="size-16 rounded-full bg-primary flex items-center justify-center mb-3 shadow-lg">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
@@ -68,7 +68,7 @@ export function ChatEmptyState({ onActionClick, variant = "mobile" }: ChatEmptyS
               <path d="M9 13v2" />
             </svg>
           </div>
-          <h2 className="text-lg font-semibold text-foreground mb-1">SecureBank Assistant</h2>
+        <h2 className="text-lg font-semibold text-foreground mb-1">Banco Falabella Asistente</h2>
           <p className="text-xs text-muted-foreground text-center">
             Your intelligent dispute resolution assistant
           </p>
@@ -84,19 +84,19 @@ export function ChatEmptyState({ onActionClick, variant = "mobile" }: ChatEmptyS
                   key={suggestion.label}
                   variant="outline"
                   onClick={() => onActionClick(suggestion.message)}
-                  className="h-auto py-3 px-4 justify-start text-left rounded-lg border-neutral-300 bg-white hover:bg-[#704EFD]/5 hover:border-[#704EFD] transition-all group"
+                  className="h-auto py-3 px-4 justify-start text-left rounded-lg border-neutral-300 bg-white hover:bg-primary/5 hover:border-primary transition-all group"
                 >
                   <div className="flex items-center gap-2.5 w-full">
-                    <div className="p-1.5 rounded-lg bg-[#704EFD]/10 group-hover:bg-[#704EFD]/20 transition-colors">
-                      <Icon className="size-4 text-[#704EFD]" />
+                    <div className="p-1.5 rounded-lg bg-primary/10 group-hover:bg-primary/20 transition-colors">
+                      <Icon className="size-4 text-primary" />
                     </div>
                     <div className="flex-1">
-                      <p className="text-xs font-medium text-foreground group-hover:text-[#704EFD] transition-colors">
+                      <p className="text-xs font-medium text-foreground group-hover:text-primary transition-colors">
                         {suggestion.label}
                       </p>
                     </div>
                     <svg
-                      className="size-3.5 text-muted-foreground group-hover:text-[#704EFD] group-hover:translate-x-0.5 transition-all"
+                      className="size-3.5 text-muted-foreground group-hover:text-primary group-hover:translate-x-0.5 transition-all"
                       fill="none"
                       viewBox="0 0 24 24"
                       stroke="currentColor"
@@ -117,7 +117,7 @@ export function ChatEmptyState({ onActionClick, variant = "mobile" }: ChatEmptyS
     <div className="flex flex-col items-center justify-center h-full px-6 py-12">
       {/* Logo and Title */}
       <div className="flex flex-col items-center mb-12">
-        <div className="size-20 rounded-full bg-gradient-to-br from-[#704EFD] to-[#5a3dd4] flex items-center justify-center mb-4 shadow-lg">
+        <div className="size-20 rounded-full bg-primary flex items-center justify-center mb-4 shadow-lg">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
@@ -136,7 +136,7 @@ export function ChatEmptyState({ onActionClick, variant = "mobile" }: ChatEmptyS
             <path d="M9 13v2" />
           </svg>
         </div>
-        <h2 className="text-2xl font-semibold text-foreground mb-2">SecureBank Assistant</h2>
+        <h2 className="text-2xl font-semibold text-foreground mb-2">Banco Falabella Asistente</h2>
         <p className="text-sm text-muted-foreground">
           Your intelligent dispute resolution assistant
         </p>
@@ -152,19 +152,19 @@ export function ChatEmptyState({ onActionClick, variant = "mobile" }: ChatEmptyS
                 key={suggestion.label}
                 variant="outline"
                 onClick={() => onActionClick(suggestion.message)}
-                className="h-auto py-4 px-5 justify-start text-left rounded-xl border-neutral-200 bg-white hover:bg-[#704EFD]/5 hover:border-[#704EFD] transition-all group"
+                className="h-auto py-4 px-5 justify-start text-left rounded-xl border-neutral-200 bg-white hover:bg-primary/5 hover:border-primary transition-all group"
               >
                 <div className="flex items-center gap-3 w-full">
-                  <div className="p-2 rounded-lg bg-[#704EFD]/10 group-hover:bg-[#704EFD]/20 transition-colors">
-                    <Icon className="size-5 text-[#704EFD]" />
+                  <div className="p-2 rounded-lg bg-primary/10 group-hover:bg-primary/20 transition-colors">
+                    <Icon className="size-5 text-primary" />
                   </div>
                   <div className="flex-1">
-                    <p className="text-sm font-medium text-foreground group-hover:text-[#704EFD] transition-colors">
+                    <p className="text-sm font-medium text-foreground group-hover:text-primary transition-colors">
                       {suggestion.label}
                     </p>
                   </div>
                   <svg
-                    className="size-4 text-muted-foreground group-hover:text-[#704EFD] group-hover:translate-x-0.5 transition-all"
+                    className="size-4 text-muted-foreground group-hover:text-primary group-hover:translate-x-0.5 transition-all"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"

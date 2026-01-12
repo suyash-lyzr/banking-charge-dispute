@@ -30,7 +30,7 @@ export function DisputesSidebar({ disputes }: DisputesSidebarProps) {
       {/* Header */}
       <div className="p-4 border-b border-neutral-200/70">
         <div className="flex items-center gap-2 mb-1">
-          <Shield className="size-5 text-[#704EFD]" />
+          <Shield className="size-5 text-primary" />
           <h2 className="font-semibold text-[17px] text-foreground">Disputes</h2>
         </div>
         <p className="text-xs text-muted-foreground">Track your dispute requests</p>

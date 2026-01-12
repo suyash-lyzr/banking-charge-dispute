@@ -46,13 +46,13 @@ export function ChatInput({
               onKeyPress={handleKeyPress}
               placeholder={placeholder}
               disabled={disabled}
-              className="h-10 pr-12 rounded-full border-neutral-300 bg-white shadow-sm focus-visible:ring-2 focus-visible:ring-[#704EFD]/20 focus-visible:border-[#704EFD] text-[15px] placeholder:text-muted-foreground/60"
+              className="h-10 pr-12 rounded-full border-neutral-300 bg-white shadow-sm focus-visible:ring-2 focus-visible:ring-primary/20 focus-visible:border-primary text-[15px] placeholder:text-muted-foreground/60"
             />
             <Button
               onClick={handleSend}
               disabled={disabled || !input.trim()}
               size="icon"
-              className="absolute right-1 top-1/2 -translate-y-1/2 size-8 rounded-full bg-[#704EFD] hover:bg-[#5a3dd4] shadow-sm transition-all disabled:opacity-40 disabled:cursor-not-allowed"
+              className="absolute right-1 top-1/2 -translate-y-1/2 size-8 rounded-full bg-primary hover:bg-primary/90 shadow-sm transition-all disabled:opacity-40 disabled:cursor-not-allowed"
             >
               {disabled ? (
                 <Loader2 className="size-3.5 animate-spin" />
@@ -77,13 +77,13 @@ export function ChatInput({
               onKeyPress={handleKeyPress}
               placeholder={placeholder}
               disabled={disabled}
-              className="h-12 pr-14 rounded-xl border-neutral-200 bg-white shadow-sm focus-visible:ring-2 focus-visible:ring-[#704EFD]/20 focus-visible:border-[#704EFD] text-[15px] placeholder:text-muted-foreground/60"
+              className="h-12 pr-14 rounded-xl border-neutral-200 bg-white shadow-sm focus-visible:ring-2 focus-visible:ring-primary/20 focus-visible:border-primary text-[15px] placeholder:text-muted-foreground/60"
             />
             <Button
               onClick={handleSend}
               disabled={disabled || !input.trim()}
               size="icon"
-              className="absolute right-2 top-1/2 -translate-y-1/2 size-9 rounded-lg bg-[#704EFD] hover:bg-[#5a3dd4] shadow-sm transition-all disabled:opacity-40 disabled:cursor-not-allowed"
+              className="absolute right-2 top-1/2 -translate-y-1/2 size-9 rounded-lg bg-primary hover:bg-primary/90 shadow-sm transition-all disabled:opacity-40 disabled:cursor-not-allowed"
             >
               {disabled ? (
                 <Loader2 className="size-4 animate-spin" />

@@ -74,7 +74,7 @@ export function TransactionCard({ transaction, className, onSelect, showDisputeB
                   <Store className="size-3 text-primary" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <div className="font-semibold text-[14px] text-foreground mb-0.5 truncate">
+                  <div className="font-semibold text-[14px] text-foreground mb-0.5 clamp-2 break-words">
                     {transaction.merchant}
                   </div>
                   <div className="text-[12px] text-muted-foreground">
@@ -128,7 +128,7 @@ export function TransactionCard({ transaction, className, onSelect, showDisputeB
                 <Store className="size-3.5 text-primary" />
               </div>
               <div className="flex-1 min-w-0">
-                <div className="font-semibold text-[15px] text-foreground mb-0.5 truncate">
+                <div className="font-semibold text-[15px] text-foreground mb-0.5 clamp-2 break-words">
                   {transaction.merchant}
                 </div>
                 <div className="text-[13px] text-muted-foreground">
